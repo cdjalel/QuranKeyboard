@@ -1,0 +1,2 @@
+#-keep class java.io.FileNotFoundException { *; }
+-dontwarn java.io.**

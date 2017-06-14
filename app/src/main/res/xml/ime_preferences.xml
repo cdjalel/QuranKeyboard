@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2011 Google Inc.
+     Copyright (C) 2017 Djalel Chefrour
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        android:title="@string/settings_name">
+    <Preference
+        android:key="pref_help_key"
+        android:title="@string/pref_help_title">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.djalel.android.qurankeyboard"
+            android:targetClass="com.djalel.android.qurankeyboard.HelpActivity" />
+
+    </Preference>
+
+    <ListPreference
+        android:key="pref_quran_rasm_type"
+        android:title="@string/pref_quran_rasm_type"
+        android:summary="%s"
+        android:dialogTitle="@string/pref_quran_rasm_title"
+        android:entries="@array/pref_quran_rasm_type_entries"
+        android:entryValues="@array/pref_quran_rasm_type_values"
+        android:defaultValue="@string/pref_quran_rasm_type_default" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_search_limit_default"
+        android:dialogTitle="@string/pref_search_limit"
+        android:inputType="number"
+        android:numeric="integer"
+        android:key="pref_search_limit"
+        android:summary="@string/pref_search_limit_summ"
+        android:title="@string/pref_search_limit" />
+
+
+    <CheckBoxPreference
+        android:key="pref_aya_begin"
+        android:title="@string/pref_aya_begin"
+        android:summary="@string/pref_aya_begin_summ"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:key="pref_surah_aya_nbrs"
+        android:title="@string/pref_surah_aya_nbrs"
+        android:summary="@string/pref_surah_aya_nbrs_summ"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_start_shifted"
+        android:summary="@string/pref_start_shifted_summ"
+        android:title="@string/pref_start_shifted" />
+
+    <Preference
+        android:key="pref_about_key"
+        android:title="@string/pref_about_title">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.djalel.android.qurankeyboard"
+            android:targetClass="com.djalel.android.qurankeyboard.AboutActivity" />
+
+    </Preference>
+
+</PreferenceScreen>

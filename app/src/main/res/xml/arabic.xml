@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+**
+** Copyright 2008, The Android Open Source Project
+** Copyright 2017, Djalel Chefrour
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+**
+*/
+-->
+
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="09%p"
+    android:horizontalGap="2px"
+    android:verticalGap="6px"
+    android:keyHeight="@dimen/key_height"
+    >
+
+<Row
+    android:rowEdgeFlags="top"
+    >
+    <Key
+        android:keyLabel="ض"
+        android:keyEdgeFlags="left" />
+    <Key
+        android:keyLabel="ص"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="1" />
+    <Key
+        android:keyLabel="ث"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="2" />
+    <Key
+        android:keyLabel="ق"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="3ڤ" />
+    <Key
+        android:keyLabel="ف"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="4" />
+    <Key
+        android:keyLabel="غ"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="5" />
+    <Key
+        android:keyLabel="ع"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="6" />
+    <Key
+        android:keyLabel="ه"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="7" />
+    <Key
+        android:keyLabel="خ"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="8" />
+    <Key
+        android:keyLabel="ح"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="9" />
+    <Key
+        android:keyLabel="ج"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="0چ"
+        android:keyEdgeFlags="right" />
+</Row>
+<Row>
+    <Key
+        android:keyLabel="ش"
+        android:keyEdgeFlags="left" />
+    <Key
+        android:keyLabel="س" />
+    <Key
+        android:keyLabel="ي" />
+    <Key
+        android:keyLabel="ب"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="پ" />
+    <Key
+        android:keyLabel="ل" />
+    <Key
+        android:keyLabel="ا"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="أإآء" />
+    <Key
+        android:keyLabel="ت"  />
+    <Key
+        android:keyLabel="ن" />
+    <Key
+        android:keyLabel="م"  />
+    <Key
+        android:keyLabel="ك"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="گ" />
+    <Key
+        android:keyLabel="ط"
+        android:keyEdgeFlags="right" />
+</Row>
+<Row>
+    <!-- Trick: we use the sticky shift key to toggle Quran Search -->
+    <Key
+        android:codes="@integer/key_shift"
+        android:keyIcon="@drawable/sym_keyboard_quran_search"
+        android:isModifier="true"
+        android:isSticky="true"
+        android:keyWidth="15%p"
+        android:keyEdgeFlags="left"/>
+    <Key
+        android:keyLabel="ذ"  />
+    <Key
+        android:keyLabel="ؤ" />
+    <Key
+        android:keyLabel="ر"  />
+    <Key
+        android:keyLabel="ى"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="ئ" />
+    <Key
+        android:keyLabel="ة"  />
+    <Key
+        android:keyLabel="و"  />
+    <Key
+        android:keyLabel="ز"
+        android:popupKeyboard="@xml/kbd_popup_template"
+        android:popupCharacters="ژ" />
+    <Key
+        android:keyLabel="ظ" />
+    <Key
+        android:keyLabel="د" />
+    <Key
+        android:codes="@integer/key_delete"
+        android:keyIcon="@drawable/sym_keyboard_delete"
+        android:iconPreview="@drawable/sym_keyboard_feedback_delete"
+        android:keyWidth="14%p"
+        android:isRepeatable="true"
+        android:keyEdgeFlags="right" />
+</Row>
+
+<Row android:rowEdgeFlags="bottom">
+    <Key
+        android:codes="-3"
+        android:keyIcon="@drawable/sym_keyboard_done"
+        android:keyWidth="15%p"
+        android:keyEdgeFlags="left" />
+    <Key
+        android:codes="@integer/key_symbol"
+        android:keyLabel="@string/label_symbol_key"
+        android:keyWidth="10%p" />
+    <!--
+        android:codes: -101 is not a framework-defined key code but a key code that is
+        privately defined in com.android.qurankeyboard.ArabicKeyboardView.
+ -->
+    <Key
+        android:codes="@integer/key_language_switch"
+        android:keyIcon="@drawable/sym_keyboard_language_switch"
+        android:keyWidth="10%p" />
+    <Key
+        android:codes="@integer/key_space"
+        android:keyIcon="@drawable/sym_keyboard_space"
+        android:iconPreview="@drawable/sym_keyboard_feedback_space"
+        android:keyWidth="35%p"
+        android:isRepeatable="true" />
+    <!--TODO disable popup and symbols when search button is on-->
+    <Key
+        android:keyLabel=".ّ"
+        android:keyIcon="@drawable/hint_popup"
+        android:popupKeyboard="@xml/popup_punctuation"
+        android:keyWidth="10%p"
+        android:keyTextSize="26sp"
+        android:labelTextSize="26sp"/>
+    <Key
+        android:codes="@integer/key_return"
+        android:keyIcon="@drawable/sym_keyboard_return"
+        android:iconPreview="@drawable/sym_keyboard_feedback_return"
+        android:keyWidth="20%p"
+        android:keyEdgeFlags="right" />
+</Row>
+</Keyboard>   

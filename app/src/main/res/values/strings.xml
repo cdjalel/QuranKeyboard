@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+/*
+**
+** Copyright 2008, The Android Open Source Project
+** Copyright (C) 2017 Djalel Chefrour
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources>
+    <!-- Title for Quran keyboard  -->
+    <string name="ime_name">لوح مفاتيح القرآن الكريم</string>
+
+    <!-- Symbols that are commonly considered word separators in this language -->
+    <string name="word_separators">.،؛:!؟\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
+
+    <!-- Labels on soft keys -->
+    <string name="label_go_key">اذهب</string>
+    <string name="label_next_key">تالي</string>
+    <string name="label_send_key">أرسل</string>
+
+    <string name="label_symbol_key">123</string>
+
+    <!-- Options menu -->
+    <!--<string name="ime_settings">إعدادات لوح مفاتيح القرآن الكريم</string>-->
+    <string name="change_ime">تغيير طريقة الإدخال</string>
+
+    <!-- Titles for ImePrefsActivity -->
+    <string name="settings_name">إعدادات لوح مفاتيح القرآن الكريم</string>
+
+
+    <string name="pref_start_shifted">تفعيل البحث عند تشغيل لوح المفاتيح</string>
+    <string name="pref_start_shifted_summ">تفعيل زر المصحف عند أول ظهور للوح المفاتيح، لبدأ البحث مباشرة أثناء إدخال الكلمات.</string>
+
+    <string name="pref_aya_begin">نسخ الآية المختارة من أولها</string>
+    <string name="pref_aya_begin_summ">نسخ الآية المختارة من أولها إلى آخرها (عدم التفعيل يعني النسخ من أول كلمة البحث إلى آخر الأية).</string>
+
+    <string name="pref_surah_aya_nbrs">إضافة اسم السورة ورقم الآية</string>
+    <string name="pref_surah_aya_nbrs_summ">تذييل الآية باسم سورتها ورقمها عند عرضها ونسخها.</string>
+
+    <string name="pref_quran_rasm_type">الرسم المُستعمل للنص القرآني</string>
+    <string name="pref_quran_rasm_title">نوع الرسم المُستعمل للنص القرآني (عثماني، أو إملائي مع الشكل، أو بدونه).</string>
+    <string name="pref_quran_rasm_type_default">ImlaMashkul</string>
+
+    <string name="pref_search_limit">الحد الأقصى للبحث</string>
+    <string name="pref_search_limit_summ">الحد الأقصى لعدد الآيات الموافقة الذي يتوقف بعدها البحث (القيمة 0 تعني البحث في كامل القرآن. هي والقيم الأكبر من 10 قد تجعل البحث بطيئاً).</string>
+    <string name="pref_search_limit_default">10</string>
+
+
+    <string name="pref_about_title">حول البرنامج</string>
+<string name="pref_about_summ">
+هذا البرنامج هو لوح مفاتيح عربي متكامل، أُضيفت إليه خدمة البحث السريع في القرآن الكريم
+ ونسخ الآيات أثناء الكتابة على أجهزة الأندرويد. هدفه توفير الوقت وصيانة كلام الله
+    عن أخطاء النقل التي تحدث بسبب النسيان أو صعوبة إدخال النص يدويا، خصوصاً على شاشات اللمس.
+\n\n
+ ملاحظة هامة:\n
+ هذه النسخة من البرنامج تجريبية.
+يُرجى التنبيه على أية خطأ، خصوصاً في نص الآيات، بمراسلة البريد الإلكتروني holyquran.keyboard@gmail.com\n
+\n\n
+ رخصة البرنامج:
+\n
+    هذا البرنامج يستعمل مصدر لوح مفاتيح من مشروع أندرويد (AOSP) تحت رخصة أباتشي 2.0.
+وسيتم نشر مصدره كاملاً تحت نفس الرخصة في المستقبل القريب بعون الله.
+\n
+  يستعمل هذا البرنامج نص القرآن الكريم بالرسم العثماني ورواية حفص، المنشور
+ في موقع "مُجمّع المصحف الشريف بالمدينة المنورة"، إصدار 0.09 (fonts.qurancomplex.gov.sa/?page_id=42).\n
+ويستعمل الرسم الإملائي (مع و بدون شكل) من موقع "تنزيل" (tanzil.net/download).
+ للاستفادة الكاملة من الرسم العثماني يجب أن يكون التطبيق الذي يُكتب فيه النص يستعمل الخط المناسب.
+\n
+\n
+تنبيه هام:
+\n
+    يُرجى التأكد من استعمال النسخة الأصلية من لوح مفاتيح القرآن الكريم،
+        أو أية نسخة مشتقة منها، بشرط أن تكون مفتوحة المصدر،
+        بحيث يمكن التحقق من خلوها من برامج التجسس على معلومات المستخدم.
+</string>
+
+    <string name="pref_help_title">مساعدة المستخدم</string>
+<string name="pref_help_summ">
+لاستعمال هذا البرنامج يجب اختياره كطريقة إدخال في إعدادات اللغة (Language and Input) لنظام الأندرويد.
+\n\n
+    تفعيل خدمة البحث في القرآن الكريم يتم بالضغط  على زر المصحف (أسفل يسار الشاشة) لتظهر فيه نقطة خضراء.
+    البحث يقتصر على الحروف التي يتم إدخالها بعد التفعيل بغض النظر عن ما كتب قبله.
+    بعد العثور على الآية المنشودة ونسخها يمكن وقف خدمة البحث بالضغط مجدداً على نفس الزر ليختفي منه الضوء الأخضر.
+\n\n
+بعد إدخال ثلاث حروف فصاعداً بالرسم الإملائي دون شكل، يبدأ البرنامج بالبحث عنها سريعاً في المصحف،
+    ثم يعرضها ملونة ضمن الآيات الموافقة كاقتراحات فوق شاشة المفاتيح.
+ تلوين حروف البحث يكون تقريبياً في الرسم العثماني بسبب اختلاف بعض حروفه عن الرسم الإملائي.
+\n\n
+يُمكن التنقل بين الآيات في شريط الاقتراحات بتحريكه أفقيا. وإذا استمر المستخدم في إدخال حروف جديدة،
+    فإن البرنامج يقوم بتحديث الاقتراحات بسرعة. وعند اختيار إحداها، يتم نسخها مكان حروف البحث.
+\n\n
+ حسب الإعدادات المختارة، يمكن نسخ الآية كاملة،
+    أو نسخ نصها من كلمة البحث إلى آخرها. ويمكن تذييلها باسم سورتها ورقمها.
+    كما يمكن اختيار نوع الرسم المستعمل لعرض الآية: إما عثماني، أو إملائي مع الشكل أو إملائي بدون شكل.
+\n\n
+عند نسخ الرسم العثماني إلى خانة كتابة على الشاشة،
+ يُشترط أن يدعم تطبيقها خط القرآن الكريم برواية حفص، كي يظهر النص بشكل صحيح.
+نفس الشرط يلزم عند حفظ الآيات أو إرسالها لتُفتح لاحقاً في تطبيق أو جهاز آخر.
+</string>
+</resources>

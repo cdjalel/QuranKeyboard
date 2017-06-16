@@ -1,10 +1,10 @@
 # QuranKeyboard
 Holy Quran Arabic Android Keyboard
 
-Youtube Demo
-============
+Youtube usage demo
+==================
 
-[![Holy quran Keuboard Demo](http://img.youtube.com/vi/FCiLyVEzIXA/0.jpg)](http://www.youtube.com/watch?v=FCiLyVEzIXA)
+[![Holy Quran Keyboard Demo](http://img.youtube.com/vi/FCiLyVEzIXA/0.jpg)](http://www.youtube.com/watch?v=FCiLyVEzIXA)
 
 
 Screenshots
@@ -16,3 +16,10 @@ Screenshots
  <th><img src="https://user-images.githubusercontent.com/5300525/27157378-246f2cc0-5159-11e7-8666-037b56805b8f.png" width="240" height="426" /></th>
  </tr>
  </table>
+ 
+ Installation from APK (link & demo)
+ ===================================
+ 
+ <https://drive.google.com/open?id=0B29YwoaM6DceUDFWQUZyRi1ZeG8>
+ 
+ [![Holy Quran Keyboard APK Installatio Demo](http://img.youtube.com/vi/bHO3-Xo-Hw4/0.jpg)](http://www.youtube.com/watch?v=bHO3-Xo-Hw4)

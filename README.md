@@ -1,14 +1,14 @@
 # QuranKeyboard
-Holy Quran Arabic Android Keyboard
+Holy Quran Arabic Android Keyboard لوح مفاتيح القرآن الكريم
 
-Youtube usage demo
-==================
+لوح مفاتيح عربي كامل لنظام الأندرويد مع خدمة البحث السريع في القرآن الكريم لتسهيل الاستشهاد بآياته، بالشكل وبدون أخطاء.
+
+## Youtube usage demo
 
 [![Holy Quran Keyboard Demo](http://img.youtube.com/vi/FCiLyVEzIXA/0.jpg)](http://www.youtube.com/watch?v=FCiLyVEzIXA)
 
 
-Screenshots
-===========
+## Screenshots
 <table>
  <tr>
  <th><img src="https://user-images.githubusercontent.com/5300525/27157379-2478e2ce-5159-11e7-8fc6-48a49299538e.png" width="240" height="426" /></th>
@@ -17,9 +17,7 @@ Screenshots
  </tr>
  </table>
  
- Installation from APK (link & demo)
- ===================================
+## Installation from APK (link & demo) 
+<https://drive.google.com/open?id=0B29YwoaM6DceUDFWQUZyRi1ZeG8>
  
- <https://drive.google.com/open?id=0B29YwoaM6DceUDFWQUZyRi1ZeG8>
- 
- [![Holy Quran Keyboard APK Installatio Demo](http://img.youtube.com/vi/bHO3-Xo-Hw4/0.jpg)](http://www.youtube.com/watch?v=bHO3-Xo-Hw4)
+[![Holy Quran Keyboard APK Installatio Demo](http://img.youtube.com/vi/bHO3-Xo-Hw4/0.jpg)](http://www.youtube.com/watch?v=bHO3-Xo-Hw4)

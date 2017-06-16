@@ -1,8 +1,14 @@
 # QuranKeyboard
 Holy Quran Arabic Android Keyboard
 
+Youtube Demo
+============
+
 [![Holy quran Keuboard Demo](http://img.youtube.com/vi/FCiLyVEzIXA/0.jpg)](http://www.youtube.com/watch?v=FCiLyVEzIXA)
 
+
+Screenshots
+===========
 <table>
  <tr>
  <th><img src="https://user-images.githubusercontent.com/5300525/27157379-2478e2ce-5159-11e7-8fc6-48a49299538e.png" width="240" height="426" /></th>

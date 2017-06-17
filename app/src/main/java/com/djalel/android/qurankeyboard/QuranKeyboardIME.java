@@ -423,9 +423,7 @@ public class QuranKeyboardIME extends InputMethodService
     public void onKey(int primaryCode, int[] keyCodes) {
         if (isWordSeparator(primaryCode)) {
             // Handle separator. DCH: removed the space ' ' 0x0020
-            if (mComposing.length() > 0) {
-                commitTyped(getCurrentInputConnection());
-            }
+            commitTyped(getCurrentInputConnection());
             sendKey(primaryCode);
         } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
             handleBackspace();
@@ -561,6 +559,7 @@ public class QuranKeyboardIME extends InputMethodService
             mDoQuranSearch = !mDoQuranSearch;
             mInputView.setShifted(mDoQuranSearch);
             if (!mDoQuranSearch) {
+                commitTyped(getCurrentInputConnection());
                 setSuggestions(null, false);
             }
         } else if (currentKeyboard == mSymbolsKeyboard) {

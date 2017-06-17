@@ -198,8 +198,7 @@ public class CandidateView extends View {
                 }
                 canvas.drawText(suggestion, x + X_GAP, y, paint);
                 paint.setColor(mColorOther); 
-                canvas.drawLine(x + wordWidth + 0.5f, bgPadding.top, 
-                        x + wordWidth + 0.5f, height + 1, paint);
+                canvas.drawLine(x + wordWidth, bgPadding.top, x + wordWidth, height + 1, paint);
             }
             x += wordWidth;
         }

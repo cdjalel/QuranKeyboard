@@ -1,7 +1,9 @@
-# Holy Quran Arabic Android Keyboard لوح مفاتيح القرآن الكريم
+# Holy Quran Keyboard لوح مفاتيح القرآن الكريم
 
 <p dir='rtl' align='right'>لوح مفاتيح عربي كامل لنظام الأندرويد مع خدمة البحث السريع في القرآن الكريم لتسهيل الاستشهاد بآياته، بالشكل وبدون أخطاء.
 </p>
+
+<a href="https://play.google.com/store/apps/details?id=com.djalel.android.qurankeyboard"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="80pt"/></a>
 
 ## Youtube usage demo عرض كيفية الاستعمال
 

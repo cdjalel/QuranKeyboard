@@ -187,6 +187,8 @@ public class AyaMatch {
     
     // ونأى  ونا
 
+    // ننجي  نجي
+
     public String buildUthmaniRegEx()
     {
         StringBuilder b = new StringBuilder();
@@ -218,7 +220,8 @@ public class AyaMatch {
                         b.append(c);
                     break;
 
-                case 'ن': if (i > 1 && p.charAt(i-1) == 'أ' && p.charAt(i-2) == 'و') b.append("ن?");
+                case 'ن': if ((i > 1 && p.charAt(i-1) == 'أ' && p.charAt(i-2) == 'و') ||
+                              (i > 0 && p.charAt(i-1) == 'ن')) b.append("ن?");
                           else b.append(c);
                     break;
 

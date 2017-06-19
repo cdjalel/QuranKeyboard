@@ -16,8 +16,6 @@
 
 package com.djalel.android.qurankeyboard;
 
-//import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,8 +28,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class QuranSearch {
+    private static final boolean DEBUG = false;
     public static final int DEF_SEARCH_LIMIT = 10;
-    private static final String SURAH_NAME [][] = { // TODO move to resources
+    private static final String SURAH_NAME [][] = {
             {"الفاتحة", "الفَاتِحَةِ"},
             {"البقرة", "البَقَرَةِ"},
             {"آل عمران", "آلِ عِمۡرَانَ"},
@@ -157,12 +156,14 @@ public class QuranSearch {
     private static final int METHOD_INDEX_OF = 0;
     private static final int METHOD_BOYER_MOORE = 1;
     private static final int METHOD_REGEX = 2;
-    private static final int METHOD_DEFAULT = METHOD_INDEX_OF;          // IndexOf is usually faster
+    private static final int METHOD_DEFAULT = METHOD_INDEX_OF;      // IndexOf is usually faster
+
     private String quran;
     private int currentMethod;
     private boolean surahAyaNbrs;
     private boolean ayaBegin;
     private Rasm rasm;
+    private List<SearchMatch> specialCases;             // من أجل الحروف المقطعة الأقل من 2
     private QuranKeyboardIME ime;
 
     public QuranSearch(QuranKeyboardIME ime) throws IOException
@@ -213,34 +214,126 @@ public class QuranSearch {
 //        long stop = System.nanoTime();
         quran = sb.toString();
 
-//        Log.i(QuranKeyboardIME.TAG, "//////////////////////////////////");
-//        Log.i(QuranKeyboardIME.TAG, "Read " + count + " characters, in " +
+//        System.out.println("//////////////////////////////////");
+//        System.out.println("Read " + count + " characters, in " +
 //                (stop - start) / 1000 + " microseconds\t" +
 //                "Quran text length = " + quran.length());
     }
 
+
+    public boolean oneLetterSpecialCase(String p)
+    {
+        // indexes below extracted with runs containing p and following lettres
+        // grep -b -o '<p>' on quran.txt counts bytes and not unicode characters.
+        switch (p.charAt(0)) {
+            case 'ص':   // بسم الله الرحمن الرحيم ص والقرآن ذي الذكر
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 335061));
+                break;
+            case 'ق':   // بسم الله الرحمن الرحيم ق والقرآن المجيد
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 384642));
+                break;
+            case 'ن':   // بسم الله الرحمن الرحيم ن والقلم وما يسطرون
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 421495));
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
+
+    public boolean twoLettersSpecialCase(String p)
+    {
+        if (p.equals("طه")) {       // طه
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 227524));
+        }
+        else if (p.equals("طس")) {  // طس تلك آيات القرآن وكتاب مبين
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 277440));
+        }
+        else if (p.equals("يس")) {  // يس
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 324531));
+        }
+        else if (p.equals("ص ")) {  // ص والقرآن ذي الذكر
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 335061));
+        }
+        else if (p.equals("حم")) {  // حم
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 346076));       // surah 40
+            specialCases.add(new SearchMatch(quran, 353019));       // surah 41
+            specialCases.add(new SearchMatch(quran, 357570));       // surah 42
+            specialCases.add(new SearchMatch(quran, 362337));       // surah 43
+            specialCases.add(new SearchMatch(quran, 367420));       // surah 44
+            specialCases.add(new SearchMatch(quran, 369667));       // surah 45
+            specialCases.add(new SearchMatch(quran, 372513));       // surah 46
+        }
+        else if (p.equals("ق ")) {  // ق والقرآن المجيد
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 384642));
+        }
+        else if (p.equals("ن ")) {  // ن والقلم وما يسطرون
+            specialCases = new ArrayList<>();
+            specialCases.add(new SearchMatch(quran, 421495));
+        }
+        else {
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean searchable(String p)
     {
-        if (quran == null) return false;
+        if (null == quran) return false;
 
+        boolean res; 
         int plen = p.length();
 
-        if (p.contains("*")) {                  // TODO add support in IME and sanitize input
-            currentMethod = METHOD_REGEX;
-        }
-        else if (plen > MAX_INDEX_OF_LEN) {
+        specialCases = null;
+
+        if (plen > MAX_INDEX_OF_LEN) {
+            res = true;
             currentMethod = METHOD_BOYER_MOORE;
+            // TODO add support in IME and sanitize input
+            //if (res && p.contains("*")) {
+            //    currentMethod = METHOD_REGEX;
+            //}
         }
         else {
             currentMethod = METHOD_DEFAULT;
+
+            /* Below commented out code used to ignore أل التعريف, but 
+               then it doesn't work for surahs starting with ﻷام or ألر
+               (plen > MIN_PATTERN_LEN) ||
+               ((plen == MIN_PATTERN_LEN) && p.charAt(0) != 'ا' && (p.charAt(1) != 'ل'));
+             */
+
+            switch (plen) {
+                case 1:
+                    res = oneLetterSpecialCase(p);
+                    break;
+
+                case 2:
+                    res = twoLettersSpecialCase(p);
+                    break;
+
+                default:
+                    res = (plen >= MIN_PATTERN_LEN);
+                    // TODO add support in IME and sanitize input
+                    //if (res && p.contains("*")) {
+                    //    currentMethod = METHOD_REGEX;
+                    //}
+                    break;
+            }
         }
 
-        return plen >= MIN_PATTERN_LEN;
-                /*(plen > MIN_PATTERN_LEN)
-                ||
-                // don't count أل التعريف.  NO: DO COUNT IT FOR AYA ألف لا ميم
-                ((plen == MIN_PATTERN_LEN) && p.charAt(0) != 'ا' && (p.charAt(1) != 'ل'));
-                */
+        return res;
     }
 
     // should be called after a searchable() that selects the appropriate search currentMethod
@@ -248,29 +341,37 @@ public class QuranSearch {
     {
         ArrayList<AyaMatch> results = null;
 
-        if (quran != null) {
-            SearchMethod method;
-            switch (currentMethod) {
-                case METHOD_BOYER_MOORE:
-                    method = new BoyerMooreMethod();
-                    break;
-                case METHOD_REGEX:
-                    method = new RegexMethod();
-                    break;
-                case METHOD_INDEX_OF:
-                default:
-                    method = new IndexOfMethod();
-                    break;
-            }
-
+        if (null != quran) {
             ayaBegin = ime.isPrefAyaBegin();
             surahAyaNbrs = ime.isPrefSurahAyaNbrs();
             rasm = ime.getPrefRasm();
 
-            results = buildResults(method.search(quran, p, max), p.length());
+            if (null == specialCases) {
+                SearchMethod method;
+                switch (currentMethod) {
+                    case METHOD_BOYER_MOORE:
+                        method = new BoyerMooreMethod();
+                        break;
+                    case METHOD_REGEX:
+                        method = new RegexMethod();
+                        break;
+                    case METHOD_INDEX_OF:
+                    default:
+                        method = new IndexOfMethod();
+                        break;
+                }
 
-            // reset
+                results = buildResults(method.search(quran, p, max), p.length());
+            }
+            else {
+                results = buildResults(specialCases, p.length());
+            }
+
+            if(DEBUG) for (AyaMatch am:results) am.print();
+
+            // reset for next search
             currentMethod = METHOD_DEFAULT;
+            specialCases = null;
         }
 
         return results;
@@ -364,7 +465,7 @@ public class QuranSearch {
                 }
             }
         } catch (IllegalStateException|SecurityException|IOException e) {
-            // Log.e(QuranKeyboardIME.TAG, "Failed to read Rasm file " + rasm);
+            // System.out.println("Failed to read Rasm file " + rasm);
             // Rasm is a best effort feature. Imla without shakl is kept as a fallback.
         }
     }

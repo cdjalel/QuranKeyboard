@@ -17,6 +17,7 @@
 package com.djalel.android.qurankeyboard;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -374,13 +375,12 @@ public class AyaMatch {
 //        }
     }
 
-/*    public void print()
+    public void print()
     {
         System.out.println(String.format(Locale.US,
                 "AyaMatch: [%d, %d], len=%d, mlen=%d, indexes=%s",
                 nfo.surah, nfo.aya, len, mlen, indexes));
 
         nfo.print();
-    }*/
-
+    }
 }

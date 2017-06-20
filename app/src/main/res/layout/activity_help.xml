@@ -30,7 +30,8 @@
         android:layout_height="match_parent"
         android:layoutDirection="rtl"
         android:text="@string/pref_help_summ"
-        android:textAppearance="@android:style/TextAppearance"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:padding="@dimen/about_padding"
         android:scrollbars="vertical"/>
 
 </android.support.constraint.ConstraintLayout>

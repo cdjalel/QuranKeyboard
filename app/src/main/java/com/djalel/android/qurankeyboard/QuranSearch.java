@@ -292,7 +292,7 @@ public class QuranSearch {
     {
         if (null == quran) return false;
 
-        boolean res; 
+        boolean res;
         int plen = p.length();
 
         specialCases = null;
@@ -308,7 +308,7 @@ public class QuranSearch {
         else {
             currentMethod = METHOD_DEFAULT;
 
-            /* Below commented out code used to ignore أل التعريف, but 
+            /* Below commented out code used to ignore أل التعريف, but
                then it doesn't work for surahs starting with ﻷام or ألر
                (plen > MIN_PATTERN_LEN) ||
                ((plen == MIN_PATTERN_LEN) && p.charAt(0) != 'ا' && (p.charAt(1) != 'ل'));
@@ -491,27 +491,33 @@ public class QuranSearch {
         return rasmStrBld;
     }
 
-    /* To use this, uncomment time calls in the search methods
+    /*// To use this, uncomment time calls in the search methods
     private void benchmark()
     {
         if (quran == null)
             return;
 
         String[] patterns = {
-//                "إياك",
-                "مسد",
+                "مالك",
+                "ذلك الكتاب لا ريب فيه هدى",
                 "ذي القرنين",
-//                "مالك يوم الدين",
-//                "قل هو الله",
-                "الله لا إله إلا هو",
-                "إن الذين آمنوا وعملوا الصالحات",
+                "إن الذين آمنوا وعملوا الصالحات كانت",
+                "مسد",
+                "قل هو الله أحد"
         };
 
         SearchMethod[] methods = {
-//                new BruteForceMethod(),
+                new BruteForceMethod(),
                 new IndexOfMethod(),
                 new BoyerMooreMethod(),
-//                new RegexMethod(),
+                new RegexMethod(),
+        };
+
+        String[] methodNames = {
+                "BruteForceMethod",
+                "IndexOfMethod",
+                "BoyerMooreMethod",
+                "RegexMethod",
         };
 
         ayaBegin = ime.isPrefAyaBegin();
@@ -522,9 +528,9 @@ public class QuranSearch {
             System.out.println("\n++++++++++++++++++++++++ " + p);
             int l = 0;
             for (SearchMethod m : methods) {
-                System.out.println("------------------------ method = " + l++);
-                for (int i = 0; i < 3; i++) {
-                    ArrayList<AyaMatch> results = buildResults(m.search(quran, p, -1), p.length());
+                System.out.println("------------------------ method = " + methodNames[l++]);
+                for (int i = 0; i < 1; i++) {
+                    ArrayList<AyaMatch> results = buildResults(m.search(quran, p, 1), p.length());
                     printMatches(p, results);
                 }
             }

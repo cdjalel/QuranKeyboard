@@ -27,7 +27,7 @@ public class RegexMethod implements  SearchMethod {
     {
         //long start = System.nanoTime();
         //long stop = 0;
-        
+
         List<SearchMatch> matches = new ArrayList<>();
 
         int plen = pattern.length();
@@ -36,7 +36,8 @@ public class RegexMethod implements  SearchMethod {
                 max = Integer.MAX_VALUE;
             }
 
-            Pattern p = Pattern.compile(pattern, Pattern.LITERAL);
+            // FIXME sanitize 'pattern' as it is a user input
+            Pattern p = Pattern.compile("([0-9]+)\\|([0-9]+)\\|(.*("+pattern+").*)");
             Matcher m = p.matcher(text);
             while(m.find() && matches.size() < max) {
                 //stop = System.nanoTime();

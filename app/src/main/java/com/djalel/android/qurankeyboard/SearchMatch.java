@@ -70,14 +70,21 @@ public class SearchMatch {
     {
         time = t;
 
-        // RegEx matching patterns are always limited to '|([0-9]+)|([0-9]+)|(*(user pattern))\n'
-        index = begin = m.start(3);
-        end = m.end(3);
+        // RegEx matching patterns are always limited to '\|([0-9]+)\|([0-9]+)\|(.*(pattern).*)\n'
+        // https://www.freeformatter.com/java-regex-tester.html#ad-output
 
         surah = Integer.parseInt(m.group(1));
         aya = Integer.parseInt(m.group(2));
 
-        word = m.start(4);
+        begin = m.start(3);
+        end = m.end(3) + 1;
+
+        index = m.start(4);
+
+        word = m.group(0).lastIndexOf(' ', index - m.start(0)) + 1 + m.start(0);
+        if (word == 0 || word < begin) {
+            word = begin;
+        }
     }
 
     public SearchMatch(Matcher m) { this(m, 0); }

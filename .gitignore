@@ -13,6 +13,7 @@
 bin/
 gen/
 out/
+app/release
 
 # Gradle files
 .gradle/
@@ -40,6 +41,9 @@ captures/
 .idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
+.idea/markdown-navigator.xml
+.idea/codeStyles/
+.idea/caches/
 
 # Keystore files
 *.jks
@@ -72,3 +76,8 @@ Session.vim
 *~
 # Auto-generated tag files
 tags
+
+cscope.*
+
+# signning keys
+keystore.properties

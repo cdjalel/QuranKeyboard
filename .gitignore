@@ -1,7 +1,9 @@
-#https://github.com/github/gitignore/blob/master/Android.gitignore
+# https://raw.githubusercontent.com/github/gitignore/master/Android.gitignore
 # Built application files
 *.apk
+*.aar
 *.ap_
+*.aab
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -13,7 +15,8 @@
 bin/
 gen/
 out/
-app/release
+#  Uncomment the following line in case you need and you don't have the release build type files in your app
+release/
 
 # Gradle files
 .gradle/
@@ -34,22 +37,28 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# Intellij
+# IntelliJ
 *.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
+.idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
 .idea/markdown-navigator.xml
 .idea/codeStyles/
 .idea/caches/
+.idea/modules.xml
+# Comment next line if keeping position of elements in Navigation Editor is relevant for you
+.idea/navEditor.xml
 
 # Keystore files
 *.jks
+*.keystore
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
+.cxx/
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
@@ -58,6 +67,23 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md
+
+# Version control
+vcs.xml
+
+# lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+# lint/reports/
 
 .DS_Store
 

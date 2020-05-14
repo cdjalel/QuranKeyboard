@@ -18,20 +18,16 @@
 */
 -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.djalel.android.qurankeyboard.HelpActivity">
+    android:padding="8dp"
+    tools:context="com.djalel.android.qurankeyboard.settings.HelpActivity">
 
-    <TextView
-        android:id="@+id/help_textview"
+    <WebView
+        android:id="@+id/help_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutDirection="rtl"
-        android:text="@string/pref_help_summ"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-        android:padding="@dimen/about_padding"
-        android:scrollbars="vertical"/>
-
-</android.support.constraint.ConstraintLayout>
+        android:layoutDirection="rtl" />
+</androidx.constraintlayout.widget.ConstraintLayout>

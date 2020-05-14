@@ -17,7 +17,7 @@
 ** limitations under the License.
 */
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title for Quran keyboard  -->
     <string name="ime_name">لوح مفاتيح القرآن الكريم</string>
 
@@ -58,55 +58,121 @@
 
 
     <string name="pref_about_title">حول البرنامج</string>
-<string name="pref_about_summ">
-هذا البرنامج هو لوح مفاتيح عربي متكامل، أُضيفت إليه خدمة البحث السريع في القرآن الكريم
- ونسخ الآيات أثناء الكتابة على أجهزة الأندرويد. هدفه توفير الوقت وصيانة كلام الله
+<string name="pref_about_summ"><![CDATA[
+<html>
+<head></head>
+<body style="text-align:justify;" dir="rtl" lang="ar">
+<h3>تعريف:</h3>
+
+«لوح مفاتيح القرآن الكريم» هو لوح مفاتيح عربي متكامل، أُضيفت إليه خدمة البحث السريع عن آيات الكتاب العزيز ونسخها أثناء الكتابة على أجهزة الأندرويد. هدفه توفير الوقت وصيانة كلام الله
     عن أخطاء النقل التي تحدث بسبب النسيان أو صعوبة إدخال النص يدويا، خصوصاً على شاشات اللمس.
-\n\n
- ملاحظة هامة:\n
+<br/>
+
+<h3>ملاحظة هامة:</h3>
  هذه النسخة من البرنامج تجريبية.
-يُرجى التنبيه على أية خطأ، خصوصاً في نص الآيات، بمراسلة البريد الإلكتروني holyquran.keyboard@gmail.com\n
-\n\n
- رخصة البرنامج:
-\n
-    هذا البرنامج مفتوح المصدر تحت رخصة أباتشي 2.0، على الرابط https://github.com/cdjalel/QuranKeyboard
-\n
+يُرجى التنبيه على أية خطأ، خصوصاً في نص الآيات، بمراسلة المطور على البريد الإلكتروني:
+<br/>
+<a href="mailto:cdjalel@gmail.com">cdjalel@gmail.com</a>
+<br/>
+
+<h3>  رخصة البرنامج:</h3>
+    هذا البرنامج مفتوح المصدر تحت رخصة أباتشي 2.0، على هذا
+<a href="https://github.com/cdjalel/QuranKeyboard">الرابط</a>
+.
+<br/>
   يستعمل هذا البرنامج نص القرآن الكريم بالرسم العثماني ورواية حفص، المنشور
- في موقع "مُجمّع المصحف الشريف بالمدينة المنورة"، إصدار 0.09 (fonts.qurancomplex.gov.sa/?page_id=42).\n
-ويستعمل الرسم الإملائي (مع و بدون شكل) من موقع "تنزيل" (tanzil.net/download).
- للاستفادة الكاملة من الرسم العثماني يجب أن يكون التطبيق الذي يُكتب فيه النص يستعمل الخط المناسب.
-\n
-\n
-تنبيه هام:
-\n
+في موقع "مُجمّع المصحف الشريف بالمدينة المنورة" (<a href="fonts.qurancomplex.gov.sa/?page_id=42">إصدار 0.09</a>).
+<br/>
+
+    ويستعمل الرسم الإملائي (مع و بدون شكل) من موقع (<a href="tanzil.net/download">تنزيل</a>).
+ للاستفادة الكاملة من الرسم <strong> العثماني </strong> يجب أن يكون التطبيق الذي يُكتب فيه النص يستعمل هذا الخط.
+<br/>
+<h3>تنبيه هام:</h3>
     يُرجى التأكد من استعمال النسخة الأصلية من لوح مفاتيح القرآن الكريم،
         أو أية نسخة مشتقة منها، بشرط أن تكون مفتوحة المصدر،
         بحيث يمكن التحقق من خلوها من برامج التجسس على معلومات المستخدم.
+</body>
+</html>
+]]>
 </string>
 
     <string name="pref_help_title">مساعدة المستخدم</string>
-<string name="pref_help_summ">
-لاستعمال هذا البرنامج يجب اختياره كطريقة إدخال في إعدادات اللغة (Language and Input) لنظام الأندرويد.
+<string name="pref_help_summ"><![CDATA[
+<html>
+<head></head>
+<body style="text-align:justify;" dir="rtl" lang="ar">
+لاستعمال هذا البرنامج يجب اختياره كطريقة إدخال في إعدادات اللغة (Language&#160;&amp; Input) لنظام الأندرويد.
 تفعيل خدمة البحث في القرآن الكريم يتم بالضغط  على زر المصحف (أسفل يسار الشاشة) لتظهر فيه نقطة خضراء.
 البحث يقتصر على الحروف التي يتم إدخالها بعد التفعيل، بغض النظر عن ما كُتب قبله.
-\n\n
+<br/>
+<br/>
 يبدأ البحث السريع في المصحف بعد إدخال ثلاث حروف فصاعداً بالرسم الإملائي دون شكل.
 ويُستثنى من هاته القاعدة فواتح السور ذات الحرف الواحد أو الحرفين (ص، ق، ن، طه، طس، يس وحم).
 يتم عرض حروف البحث ملونةً ضمن الآيات الموافقة لها كاقتراحات فوق شاشة المفاتيح.
 تلوين حروف البحث يكون تقريبياًً في الرسم العثماني بسبب اختلاف بعض حروفه عن الرسم الإملائي.
-\n\n
+<br/>
+<br/>
 يُمكن التنقل بين آيات البحث في شريط الاقتراحات بتحريكه أفقيا. وإذا استمر المستخدم في إدخال حروف جديدة،
 فإن البرنامج يقوم بتحديث الاقتراحات بسرعة. وعند اختيار إحداها، يتم نسخها مكان حروف البحث.
 بعد العثور على الآية المنشودة ونسخها يمكن وقف خدمة البحث بالضغط مجدداً على زر المصحف ليختفي منه الضوء الأخضر.
-\n\n
-الوصول إلى إعدادات البرنامج ممكن من إعدادات النظام (في قسم اللغة) 
+<br/>
+<br/>
+الوصول إلى إعدادات البرنامج ممكن من إعدادات النظام (في قسم اللغة)
 أو بالضغط الطويل على زر إخفاء لوح المفاتيح (أقصى أسفل يسار الشاشة).
  حسب الإعدادات المختارة، يمكن نسخ الآية كاملة، أو نسخ نصها من كلمة البحث إلى آخرها.
 كما يمكن تذييلها باسم سورتها ورقمها. ويمكن اختيار نوع الرسم المستعمل لعرض الآية:
 إما عثماني، أو إملائي مع الشكل أو إملائي بدون شكل.
-\n\n
-عند نسخ الرسم العثماني إلى خانة الكتابة على الشاشة،
+<br/>
+<br/>
+عند نسخ الرسم العثماني لآية مُعينة إلى خانة الكتابة على الشاشة،
 يُشترط كي يظهر النص بشكل صحيح أن يدعم تطبيقها خط القرآن الكريم برواية حفص.
 نفس الشرط يلزم عند حفظ الآيات أو إرسالها لتُفتح لاحقاً في تطبيق أو جهاز آخر.
+</body>
+</html>
+]]>
 </string>
+
+    <!-- Title of the setup wizard welcome screen. [CHAR LIMT=40] -->
+    <string name="setup_welcome_title">"مرحبا بكم مع <xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g>"</string>
+    <!-- Additional title of the setup wizard welcome screen, just below the setup_welcome_title. [CHAR_LIMIT=64] -->
+    <string name="setup_welcome_additional_description">مع البحث عن الآيات ونسخها</string>
+    <!-- The label of the button that starts the setup wizard. [CHAR_LIMIT=64] -->
+    <string name="setup_start_action">البدء</string>
+    <!-- The label of the button that navigates the user to the next step of the setup wizard. [CHAR_LIMIT=64] -->
+    <string name="setup_next_action">الخطوة التالية</string>
+    <!-- Title of the setup wizard. [CHAR LIMT=40] -->
+    <string name="setup_steps_title">"إعداد <xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g>"</string>
+    <!-- Ordinal number of the 1st step in the setup wizard. [CHAR LIMIT=5] -->
+    <string name="setup_step1_bullet" translatable="false">1</string>
+    <!-- Title of the 1st step in the setup wizard. [CHAR LIMIT=64] -->
+    <string name="setup_step1_title">"تفيعل <xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g>"</string>
+    <!-- Detailed instruction of the 1st step in the setup wizard. [CHAR LIMIT=120] -->
+    <string name="setup_step1_instruction">"فضلا قم بتفعيل \"<xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g>\" في إعدادات اللغة والإدخال. هذا سيسمح لك بتشغيله على جهازك."</string>
+    <!-- Detailed instruction of the already finished 1st step in the setup wizard. [CHAR LIMIT=120] -->
+    <string name="setup_step1_finished_instruction">"<xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g> مُفعّل من قبل في إعدادات اللغة والإدخال، هذه الخطوة تمت. ننتقل إلى الخطوة التالية!"</string>
+    <!-- The label of the button that triggers the Languages & input settings in order to enable the keyboard. [CHAR_LIMIT=64] -->
+    <string name="setup_step1_action">التفعيل في الإعدادات</string>
+    <!-- Ordinal number of the 2nd step in the setup wizard. [CHAR LIMIT=5] -->
+    <string name="setup_step2_bullet" translatable="false">2</string>
+    <!-- Title of the 2nd step in the setup wizard. [CHAR LIMIT=64] -->
+    <string name="setup_step2_title">"اختيار <xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g>"</string>
+    <!-- Detailed instruction of the 2nd step in the setup wizard. [CHAR LIMIT=120] -->
+    <string name="setup_step2_instruction">"في ما يلي، اختر \"<xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g>\" كطريقة لإدخال النص."</string>
+    <!-- The label of the button that triggers the choose input method dialog in order to select the keyboard. [CHAR_LIMIT=64] -->
+    <string name="setup_step2_action">تبديل طريقة الإدخال</string>
+    <!-- Ordinal number of the 3rd step in the setup wizard. [CHAR LIMIT=5] -->
+    <string name="setup_step3_bullet" translatable="false">3</string>
+    <!-- Title of the 3rd step in the setup wizard. [CHAR LIMIT=64] -->
+    <string name="setup_step3_title">"تاهانينا، انتهى الإعداد!"</string>
+    <!-- Detailed instruction of the 3rd step in the setup wizard. [CHAR LIMIT=120] -->
+    <string name="setup_step3_instruction">يمكن الآن استعمال <xliff:g id="APPLICATION_NAME" example="لوح مفاتيح القرآن الكريم">%s</xliff:g> لإدخال اللغة العربية وللبحث عن الآيات ونسخها.</string>
+    <!-- The label of the button that triggers the screen for configuaring additional languages of the keyboard. [CHAR_LIMIT=64] -->
+    <string name="setup_step3_action">تهئية إعدادات إضافية</string>
+    <!-- The label of the button that finishes the setup wizard. [CHAR_LIMIT=64] -->
+    <string name="setup_finish_action">تم</string>
+    <!-- Option to show setup wizard icon. [CHAR LIMIT=30]-->
+    <string name="show_setup_wizard_icon">إظهار أيقونة التطبيق</string>
+    <!-- Description for the option to show setup wizard application icon of this IME in the laucher. [CHAR_LIMIT=65] -->
+    <string name="show_setup_wizard_icon_summary">عرض أيقونة التطبيق في واجهة الانطلاق</string>
+
 </resources>

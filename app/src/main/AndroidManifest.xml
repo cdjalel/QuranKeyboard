@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.djalel.android.qurankeyboard">
 
-
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/ime_name"
@@ -19,21 +18,38 @@
                 android:name="android.view.im"
                 android:resource="@xml/method" />
         </service>
-
+        <activity android:name=".setup.SetupActivity"
+            android:label="@string/ime_name"
+            android:icon="@mipmap/ic_launcher"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".setup.SetupWizardActivity"
+                android:theme="@style/platformActivityTheme"
+                android:label="@string/ime_name"
+                android:clearTaskOnLaunch="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name="com.djalel.android.qurankeyboard.ImePrefsActivity"
+            android:name=".settings.ImePrefsActivity"
             android:label="@string/settings_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name="com.djalel.android.qurankeyboard.AboutActivity">
+        <activity android:name=".settings.AboutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.PREFERENCE" />
             </intent-filter>
         </activity>
-        <activity android:name="com.djalel.android.qurankeyboard.HelpActivity">
+        <activity android:name=".settings.HelpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.PREFERENCE" />

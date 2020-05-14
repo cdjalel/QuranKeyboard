@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.inputmethodservice.Keyboard;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.inputmethod.EditorInfo;
 
 public class ArabicKeyboard extends Keyboard {

@@ -30,8 +30,8 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.CallSuper;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.CallSuper;
+import androidx.annotation.DrawableRes;
 import android.text.InputType;
 //import android.util.Log;
 import android.text.SpannableStringBuilder;
@@ -44,6 +44,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.djalel.android.qurankeyboard.qsearch.AyaMatch;
+import com.djalel.android.qurankeyboard.qsearch.QuranSearch;
+import com.djalel.android.qurankeyboard.qsearch.Rasm;
+import com.djalel.android.qurankeyboard.settings.ImePrefsActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;

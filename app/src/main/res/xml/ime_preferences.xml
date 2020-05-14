@@ -24,7 +24,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.djalel.android.qurankeyboard"
-            android:targetClass="com.djalel.android.qurankeyboard.HelpActivity" />
+            android:targetClass="com.djalel.android.qurankeyboard.settings.HelpActivity" />
 
     </Preference>
 
@@ -72,7 +72,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.djalel.android.qurankeyboard"
-            android:targetClass="com.djalel.android.qurankeyboard.AboutActivity" />
+            android:targetClass="com.djalel.android.qurankeyboard.settings.AboutActivity" />
 
     </Preference>
 

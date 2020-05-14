@@ -22,5 +22,11 @@
     <color name="candidate_recommended">#FFff0000</color>
     <color name="candidate_other">#ff808080</color>
     <color name="candidate_background">#ffffffff</color>
-
+    <!-- Color resources for setup wizard and tutorial -->
+    <color name="setup_background">#FFEBEBEB</color>
+    <color name="setup_text_dark">#FF707070</color>
+<!--    <color name="setup_text_action">#FF99CC00</color>-->
+    <color name="setup_text_action">@android:color/holo_blue_light</color>
+    <color name="setup_step_background">@android:color/background_light</color>
+    <color name="setup_welcome_video_margin_color">#FFCCCCCC</color>
 </resources>

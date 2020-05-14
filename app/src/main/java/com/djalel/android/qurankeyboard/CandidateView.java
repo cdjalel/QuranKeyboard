@@ -24,7 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Layout;
 import android.text.SpannableString;
 import android.text.StaticLayout;
@@ -34,6 +34,9 @@ import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.djalel.android.qurankeyboard.qsearch.AyaMatch;
+import com.djalel.android.qurankeyboard.qsearch.Rasm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +133,9 @@ public class CandidateView extends View {
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
         setVerticalScrollBarEnabled(false);
+
+        setLayoutDirection(LAYOUT_DIRECTION_RTL);
+        setTextDirection(TEXT_DIRECTION_RTL);
     }
     
     @Override

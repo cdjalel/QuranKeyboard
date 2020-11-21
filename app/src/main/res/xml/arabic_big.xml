@@ -24,7 +24,7 @@
     android:keyWidth="@dimen/key_width"
     android:horizontalGap="@dimen/horizontal_gap"
     android:verticalGap="@dimen/vertical_gap"
-    android:keyHeight="@dimen/key_height"
+    android:keyHeight="@dimen/big_key_height"
     >
 
 <Row

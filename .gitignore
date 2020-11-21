@@ -85,6 +85,9 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
+# Android Profiling
+*.hprof
+
 .DS_Store
 
 #https://github.com/github/gitignore/blob/master/Global/Vim.gitignore

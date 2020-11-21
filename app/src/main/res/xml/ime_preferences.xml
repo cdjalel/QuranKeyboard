@@ -28,6 +28,11 @@
 
     </Preference>
 
+    <SwitchPreference
+        android:key="pref_big_keys"
+        android:title="@string/pref_big_keys"
+        android:defaultValue="false" />
+
     <ListPreference
         android:key="pref_quran_rasm_type"
         android:title="@string/pref_quran_rasm_type"
@@ -41,25 +46,24 @@
         android:defaultValue="@string/pref_search_limit_default"
         android:dialogTitle="@string/pref_search_limit"
         android:inputType="number"
-        android:numeric="integer"
         android:key="pref_search_limit"
         android:summary="@string/pref_search_limit_summ"
         android:title="@string/pref_search_limit" />
 
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="pref_aya_begin"
         android:title="@string/pref_aya_begin"
         android:summary="@string/pref_aya_begin_summ"
         android:defaultValue="true" />
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="pref_surah_aya_nbrs"
         android:title="@string/pref_surah_aya_nbrs"
         android:summary="@string/pref_surah_aya_nbrs_summ"
         android:defaultValue="true" />
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:key="pref_start_shifted"
         android:summary="@string/pref_start_shifted_summ"

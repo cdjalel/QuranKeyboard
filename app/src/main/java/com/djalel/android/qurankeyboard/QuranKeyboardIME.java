@@ -69,7 +69,7 @@ public class QuranKeyboardIME extends InputMethodService
     private boolean mPredictionOn;
     private boolean mCompletionOn;
     private int mLastDisplayWidth;
-    
+
     private ArabicKeyboard mSymbolsKeyboard;
     private ArabicKeyboard mSymbolsShiftedKeyboard;
     private ArabicKeyboard mArabicKeyboard;
@@ -87,6 +87,10 @@ public class QuranKeyboardIME extends InputMethodService
     private Typeface mUthmaniTypeFace;
 
     private AlertDialog mOptionsDialog;
+
+    private boolean mCreateInputViewFirstRun;
+    private boolean mBigKeys;
+    private boolean mBigKeyViews;
 
     /**
      * Main initialization of the input method component.  Be sure to call
@@ -114,8 +118,68 @@ public class QuranKeyboardIME extends InputMethodService
 
             setUthmaniTypeFace(Typeface.createFromAsset(getAssets(), "UthmanicHafs.otf"));
         }
+
+        mCreateInputViewFirstRun = true;
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mBigKeyViews = mBigKeys = sharedPref.getBoolean("pref_big_keys", false);
     }
-    
+
+    private void createKeyboards(boolean checkBigKeys) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean bigKeys = sharedPref.getBoolean("pref_big_keys", false);
+        if (checkBigKeys && (bigKeys == mBigKeys)) return;
+        mBigKeys = bigKeys;
+
+        ArabicKeyboard oldArabicKeyboard = mArabicKeyboard;
+        ArabicKeyboard oldSymbolsKeyboard = mSymbolsKeyboard;
+        ArabicKeyboard oldSymbolsShiftedKeyboard = mSymbolsShiftedKeyboard;
+
+        if (bigKeys) {
+            mArabicKeyboard = new ArabicKeyboard(this, R.xml.arabic_big);
+            mSymbolsKeyboard = new ArabicKeyboard(this, R.xml.symbols_big);
+            mSymbolsShiftedKeyboard = new ArabicKeyboard(this, R.xml.symbols_shift_big);
+        } else {
+            mArabicKeyboard = new ArabicKeyboard(this, R.xml.arabic);
+            mSymbolsKeyboard = new ArabicKeyboard(this, R.xml.symbols);
+            mSymbolsShiftedKeyboard = new ArabicKeyboard(this, R.xml.symbols_shift);
+        }
+
+        // Determine Moshaf key (old shift key) status depending on Prefs and mPredictions
+        if (!mPredictionOn) {
+            // The alphabetic keyboard Moshaf key must start disabled/greyed when prediction is OFF.
+            mDoQuranSearch = false;
+            // TODO Disable/grey shift key
+        } else {
+            mDoQuranSearch = sharedPref.getBoolean("pref_start_shifted", true);
+        }
+        mArabicKeyboard.setShifted(mDoQuranSearch);
+
+        if (mCurKeyboard == oldArabicKeyboard) {
+            mCurKeyboard = mArabicKeyboard;
+        } else if (mCurKeyboard == oldSymbolsKeyboard) {
+            mCurKeyboard = mSymbolsKeyboard;
+        } else if (mCurKeyboard == oldSymbolsShiftedKeyboard) {
+            mCurKeyboard = mSymbolsShiftedKeyboard;
+        }
+    }
+
+    private void createKeyboardView(boolean checkBigKeys) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean bigKeys = sharedPref.getBoolean("pref_big_keys", false);
+        if (checkBigKeys && (bigKeys == mBigKeyViews)) return;
+        mBigKeyViews = bigKeys;
+
+        if (bigKeys) {
+            mInputView = (ArabicKeyboardView) getLayoutInflater().inflate(
+                    R.layout.input_big, null);
+        } else {
+            mInputView = (ArabicKeyboardView) getLayoutInflater().inflate(
+                    R.layout.input, null);
+        }
+        mInputView.setOnKeyboardActionListener(this);
+    }
+
     /**
      * This is the point where you can do all of your UI initialization.  It
      * is called after creation and any configuration change.
@@ -129,11 +193,9 @@ public class QuranKeyboardIME extends InputMethodService
             if (displayWidth == mLastDisplayWidth) return;
             mLastDisplayWidth = displayWidth;
         }
-        mArabicKeyboard = new ArabicKeyboard(this, R.xml.arabic);
-        mSymbolsKeyboard = new ArabicKeyboard(this, R.xml.symbols);
-        mSymbolsShiftedKeyboard = new ArabicKeyboard(this, R.xml.symbols_shift);
+        createKeyboards(false);
     }
-    
+
     /**
      * Called by the framework when your view for creating input needs to
      * be generated.  This will be called the first time your input method
@@ -141,21 +203,17 @@ public class QuranKeyboardIME extends InputMethodService
      * a configuration change.
      */
     @Override public View onCreateInputView() {
-        mInputView = (ArabicKeyboardView) getLayoutInflater().inflate(
-                R.layout.input, null);
-        mInputView.setOnKeyboardActionListener(this);
-        setArabicKeyboard(mArabicKeyboard);
-
-        // Determine Moshaf key (old shift key) status depending on Prefs and mPredictions
-        if (!mPredictionOn) {
-            // The alphabetic keyboard Moshaf key must start disabled/greyed when prediction is OFF.
-            mDoQuranSearch = false;
-            // TODO Disable/grey shift key
-        } else {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            mDoQuranSearch = sharedPref.getBoolean("pref_start_shifted", true);
+        createKeyboards(true);
+        if (mCreateInputViewFirstRun) {
+            mCreateInputViewFirstRun = false;
+            createKeyboardView(false);
+            setArabicKeyboard(mArabicKeyboard);
         }
-        mArabicKeyboard.setShifted(mDoQuranSearch);
+        else {
+            createKeyboardView(true);
+            // Apply the selected keyboard to the input view.
+            setArabicKeyboard(mCurKeyboard);
+        }
 
         // resetting token users
         mOptionsDialog = null;
@@ -287,8 +345,7 @@ public class QuranKeyboardIME extends InputMethodService
     
     @Override public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
-        // Apply the selected keyboard to the input view.
-        setArabicKeyboard(mCurKeyboard);
+        setInputView(onCreateInputView());
         mInputView.closing();
     }
 
@@ -439,7 +496,7 @@ public class QuranKeyboardIME extends InputMethodService
         } else if (primaryCode == ArabicKeyboardView.KEYCODE_LANGUAGE_SWITCH) {
             handleLanguageSwitch();
         } else if (primaryCode == ArabicKeyboardView.KEYCODE_OPTIONS) {
-            showOptionsMenu();
+            launchSettings();
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
                 && mInputView != null) {
             Keyboard current = mInputView.getKeyboard();
@@ -766,26 +823,6 @@ public class QuranKeyboardIME extends InputMethodService
         intent.setClass(this, ImePrefsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    private void showOptionsMenu() {
-        showOptionsDialogWithData(getText(R.string.ime_name), R.mipmap.ic_launcher,
-                new CharSequence[]{
-                        getText(R.string.settings_name),
-                        getText(R.string.change_ime)},
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface di, int position) {
-                        switch (position) {
-                            case 0:
-                                launchSettings();
-                                break;
-                            case 1:
-                                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showInputMethodPicker();
-                                break;
-                        }
-                    }
-                }
-        );
     }
 
     private void showOptionsDialogWithData(CharSequence title, @DrawableRes int iconRedId,

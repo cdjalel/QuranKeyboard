@@ -18,6 +18,13 @@
 */
 -->
 
-<resources>
-    <dimen name="key_height">46dip</dimen>
-</resources>
+<com.djalel.android.qurankeyboard.ArabicKeyboardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/keyboard"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:keyPreviewLayout="@layout/keypreview"
+        android:keyTextSize="@dimen/big_key_text_size"
+    />
+<!--    android:labelTextSize="@dimen/big_label_text_size"-->

@@ -20,7 +20,17 @@
 -->
 
 <resources>
-    <dimen name="key_height">50dip</dimen>
+<!--    <dimen name="key_height">50dip</dimen>-->
+    <dimen name="key_width">09%p</dimen>
+    <dimen name="sym_key_width">09%p</dimen>
+    <dimen name="key_height">10%p</dimen>
+    <dimen name="big_key_height">12%p</dimen>
+    <dimen name="horizontal_gap">2dp</dimen>
+    <dimen name="vertical_gap">2dp</dimen>
+    <dimen name="key_text_size">21sp</dimen>
+    <dimen name="label_text_size">10sp</dimen>
+    <dimen name="big_key_text_size">25sp</dimen>
+    <dimen name="big_label_text_size">12sp</dimen>
     <dimen name="candidate_font_height">20sp</dimen>
     <dimen name="candidate_uthmani_font_height">20sp</dimen>
     <dimen name="candidate_vertical_padding">16sp</dimen>

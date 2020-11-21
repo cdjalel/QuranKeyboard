@@ -38,6 +38,7 @@
     <!-- Titles for ImePrefsActivity -->
     <string name="settings_name">إعدادات لوح مفاتيح القرآن الكريم</string>
 
+    <string name="pref_big_keys">تكبير مفاتيح اللوح وحروفه</string>
 
     <string name="pref_start_shifted">تفعيل البحث عند تشغيل لوح المفاتيح</string>
     <string name="pref_start_shifted_summ">تفعيل زر المصحف عند أول ظهور للوح المفاتيح، لبدأ البحث مباشرة أثناء إدخال الكلمات.</string>
@@ -48,8 +49,8 @@
     <string name="pref_surah_aya_nbrs">إضافة اسم السورة ورقم الآية</string>
     <string name="pref_surah_aya_nbrs_summ">تذييل الآية باسم سورتها ورقمها عند عرضها ونسخها.</string>
 
-    <string name="pref_quran_rasm_type">الرسم المُستعمل للنص القرآني</string>
-    <string name="pref_quran_rasm_title">نوع الرسم المُستعمل للنص القرآني (عثماني، أو إملائي مع الشكل، أو بدونه).</string>
+    <string name="pref_quran_rasm_type">رسم النص القرآني</string>
+    <string name="pref_quran_rasm_title">نوع الرسم المُستعمل للنص القرآني</string>
     <string name="pref_quran_rasm_type_default">ImlaMashkul</string>
 
     <string name="pref_search_limit">الحد الأقصى للبحث</string>

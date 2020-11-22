@@ -30,6 +30,7 @@
     <string name="label_send_key">أرسل</string>
 
     <string name="label_symbol_key">123</string>
+    <string name="label_letters_key">أ\ufe8fج</string>
 
     <!-- Options menu -->
     <!--<string name="ime_settings">إعدادات لوح مفاتيح القرآن الكريم</string>-->

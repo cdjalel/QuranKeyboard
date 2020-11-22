@@ -26,5 +26,5 @@
         android:layout_height="wrap_content"
         android:keyPreviewLayout="@layout/keypreview"
         android:keyTextSize="@dimen/big_key_text_size"
+        android:labelTextSize="@dimen/big_label_text_size"
     />
-<!--    android:labelTextSize="@dimen/big_label_text_size"-->

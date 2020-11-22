@@ -69,7 +69,7 @@
     </Row>
     
     <Row  android:rowEdgeFlags="bottom">
-        <Key android:codes="@integer/key_settings" android:keyIcon="@drawable/unbundled_prefs_01"
+        <Key android:codes="@integer/key_settings" android:keyIcon="@drawable/sym_keyboard_pref"
             android:keyWidth="11%p" android:keyEdgeFlags="left" />
         <Key android:codes="-2" android:keyLabel="@string/label_letters_key" android:keyWidth="15%p" />
         <Key android:codes="-101" android:keyIcon="@drawable/sym_keyboard_language_switch"

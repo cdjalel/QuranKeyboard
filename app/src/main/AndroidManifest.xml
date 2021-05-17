@@ -6,7 +6,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/ime_name"
         android:supportsRtl="true"
-        android:allowBackup="true">
+        android:allowBackup="true"
+        android:theme="@style/Theme.AppCompat.Light" >
         <service
             android:name="com.djalel.android.qurankeyboard.QuranKeyboardIME"
             android:permission="android.permission.BIND_INPUT_METHOD">

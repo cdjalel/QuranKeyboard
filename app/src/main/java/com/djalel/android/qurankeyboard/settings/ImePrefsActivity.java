@@ -16,9 +16,10 @@
 
 package com.djalel.android.qurankeyboard.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.annotation.Keep;
 
 import com.djalel.android.qurankeyboard.R;
@@ -27,7 +28,7 @@ import com.djalel.android.qurankeyboard.R;
  * Displays the IME preferences inside the input method setting.
  */
 @Keep
-public class ImePrefsActivity extends Activity {
+public class ImePrefsActivity extends AppCompatActivity {
 
 //    private static final String TAG = "ImePrefsActivity";
 
@@ -39,18 +40,16 @@ public class ImePrefsActivity extends Activity {
         // TODO setTitle(R.string.settings_name);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }
 
-    public static class SettingsFragment extends PreferenceFragment {
+    public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.ime_preferences);
+            setPreferencesFromResource(R.xml.ime_preferences, rootKey);
         }
     }
 }

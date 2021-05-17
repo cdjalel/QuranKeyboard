@@ -33,7 +33,7 @@ import java.util.zip.ZipInputStream;
 public class QuranSearch {
     private static final boolean DEBUG = false;
     public static final int DEF_SEARCH_LIMIT = 10;
-    private static final String SURAH_NAME [][] = {
+    private static final String[][] SURAH_NAME = {
             {"الفاتحة", "الفَاتِحَةِ"},
             {"البقرة", "البَقَرَةِ"},
             {"آل عمران", "آلِ عِمۡرَانَ"},
@@ -167,7 +167,7 @@ public class QuranSearch {
     private boolean ayaBegin;
     private Rasm rasm;
     private List<SearchMatch> specialCases;             // من أجل الحروف المقطعة الأقل من 2
-    private QuranKeyboardIME ime;
+    private final QuranKeyboardIME ime;
 
     public QuranSearch(QuranKeyboardIME ime) throws IOException
     {
@@ -250,42 +250,43 @@ public class QuranSearch {
 
     public boolean twoLettersSpecialCase(String p)
     {
-        if (p.equals("طه")) {       // طه
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 227524));
-        }
-        else if (p.equals("طس")) {  // طس تلك آيات القرآن وكتاب مبين
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 277440));
-        }
-        else if (p.equals("يس")) {  // يس
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 324531));
-        }
-        else if (p.equals("ص ")) {  // ص والقرآن ذي الذكر
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 335061));
-        }
-        else if (p.equals("حم")) {  // حم
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 346076));       // surah 40
-            specialCases.add(new SearchMatch(quran, 353019));       // surah 41
-            specialCases.add(new SearchMatch(quran, 357570));       // surah 42
-            specialCases.add(new SearchMatch(quran, 362337));       // surah 43
-            specialCases.add(new SearchMatch(quran, 367420));       // surah 44
-            specialCases.add(new SearchMatch(quran, 369667));       // surah 45
-            specialCases.add(new SearchMatch(quran, 372513));       // surah 46
-        }
-        else if (p.equals("ق ")) {  // ق والقرآن المجيد
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 384642));
-        }
-        else if (p.equals("ن ")) {  // ن والقلم وما يسطرون
-            specialCases = new ArrayList<>();
-            specialCases.add(new SearchMatch(quran, 421495));
-        }
-        else {
-            return false;
+        switch (p) {
+            case "طه":        // طه
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 227524));
+                break;
+            case "طس":   // طس تلك آيات القرآن وكتاب مبين
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 277440));
+                break;
+            case "يس":   // يس
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 324531));
+                break;
+            case "ص ":   // ص والقرآن ذي الذكر
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 335061));
+                break;
+            case "حم":   // حم
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 346076));       // surah 40
+                specialCases.add(new SearchMatch(quran, 353019));       // surah 41
+                specialCases.add(new SearchMatch(quran, 357570));       // surah 42
+                specialCases.add(new SearchMatch(quran, 362337));       // surah 43
+                specialCases.add(new SearchMatch(quran, 367420));       // surah 44
+                specialCases.add(new SearchMatch(quran, 369667));       // surah 45
+                specialCases.add(new SearchMatch(quran, 372513));       // surah 46
+                break;
+            case "ق ":   // ق والقرآن المجيد
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 384642));
+                break;
+            case "ن ":   // ن والقلم وما يسطرون
+                specialCases = new ArrayList<>();
+                specialCases.add(new SearchMatch(quran, 421495));
+                break;
+            default:
+                return false;
         }
 
         return true;
@@ -409,13 +410,12 @@ public class QuranSearch {
                 results.add(ayaMatch);
                 prev_surah = m.surah;
                 prev_aya = m.aya;
-                prev_index = m.index;
             }
             else { // multiple match per Aya
                 oc += (m.index - prev_index);
                 results.get(results.size()-1).addOccurrence(oc);
-                prev_index = m.index;
             }
+            prev_index = m.index;
         }
 
         if (rasm != Rasm.IMLA) {

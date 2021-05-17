@@ -50,6 +50,13 @@
     <string name="pref_surah_aya_nbrs">إضافة اسم السورة ورقم الآية</string>
     <string name="pref_surah_aya_nbrs_summ">تذييل الآية باسم سورتها ورقمها عند عرضها ونسخها.</string>
 
+    <string name="pref_braces">إحاطة الآية بأقواس</string>
+    <string name="pref_braces_summ">وضع الآية أو جزئها بين قوسين ﴿ ﴾ عند نسخها.</string>
+
+    <string name="pref_dot">ختم الآية بنقطة</string>
+    <string name="pref_dot_summ">إضافة نقطة \'.\' بعد الآية عند نسخها.</string>
+
+
     <string name="pref_quran_rasm_type">رسم النص القرآني</string>
     <string name="pref_quran_rasm_title">نوع الرسم المُستعمل للنص القرآني</string>
     <string name="pref_quran_rasm_type_default">ImlaMashkul</string>

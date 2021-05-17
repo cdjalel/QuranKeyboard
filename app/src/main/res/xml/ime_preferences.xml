@@ -58,9 +58,21 @@
         android:defaultValue="true" />
 
     <SwitchPreference
+        android:key="pref_braces"
+        android:title="@string/pref_braces"
+        android:summary="@string/pref_braces_summ"
+        android:defaultValue="true" />
+
+    <SwitchPreference
         android:key="pref_surah_aya_nbrs"
         android:title="@string/pref_surah_aya_nbrs"
         android:summary="@string/pref_surah_aya_nbrs_summ"
+        android:defaultValue="true" />
+
+    <SwitchPreference
+        android:key="pref_dot"
+        android:title="@string/pref_dot"
+        android:summary="@string/pref_dot_summ"
         android:defaultValue="true" />
 
     <SwitchPreference

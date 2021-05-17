@@ -24,8 +24,8 @@ android {
         applicationId "com.djalel.android.qurankeyboard"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
     }
     buildTypes {
         release {
@@ -51,5 +51,6 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.preference:preference:1.1.1'
 }

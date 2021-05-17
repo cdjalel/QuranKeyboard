@@ -20,7 +20,6 @@ package com.djalel.android.qurankeyboard;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -145,14 +144,8 @@ public class QuranKeyboardIME extends InputMethodService
             mSymbolsShiftedKeyboard = new ArabicKeyboard(this, R.xml.symbols_shift);
         }
 
-        // Determine Moshaf key (old shift key) status depending on Prefs and mPredictions
-        if (!mPredictionOn) {
-            // The alphabetic keyboard Moshaf key must start disabled/greyed when prediction is OFF.
-            mDoQuranSearch = false;
-            // TODO Disable/grey shift key
-        } else {
-            mDoQuranSearch = sharedPref.getBoolean("pref_start_shifted", true);
-        }
+        // Determine Moshaf key (old shift key) status depending on Prefs
+        mDoQuranSearch = sharedPref.getBoolean("pref_start_shifted", false);
         mArabicKeyboard.setShifted(mDoQuranSearch);
 
         if (mCurKeyboard == oldArabicKeyboard) {
@@ -698,14 +691,19 @@ public class QuranKeyboardIME extends InputMethodService
                 SpannableStringBuilder txt = new SpannableStringBuilder(m.strBld);
                 int len = m.len;
 
-                txt.insert(0, "﴿");
-                len++;
-                txt.insert(len - m.slen, "﴾");
-                len++;
+                if (isPrefBraces()) {
+                    txt.insert(0, "﴿");
+                    len++;
+                    txt.insert(len - m.slen, "﴾");
+                    len++;
+                }
 
-                // separate Quran from following text with a dot
-                txt.append('.');
-                len++;
+                // separate Quran from following text with a dot ?
+                if (isPrefDot()) {
+                    txt.append('.');
+                    len++;
+                }
+
                 if (getPrefRasm() == Rasm.UTHMANI /*&& mUthmaniTypeFace != null*/) {
                     txt.setSpan(new CustomTypefaceSpan(getUthmaniTypeFace()), 0, len, 0);
                 }
@@ -747,9 +745,19 @@ public class QuranKeyboardIME extends InputMethodService
         return sharedPref.getBoolean("pref_aya_begin", true);
     }
 
+    public boolean isPrefBraces() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPref.getBoolean("pref_braces", true);
+    }
+
     public boolean isPrefSurahAyaNbrs() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPref.getBoolean("pref_surah_aya_nbrs", true);
+    }
+
+    public boolean isPrefDot() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPref.getBoolean("pref_dot", true);
     }
 
     public Rasm getPrefRasm() {

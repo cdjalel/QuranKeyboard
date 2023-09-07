@@ -1,14 +1,14 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
-
-// Initialize a new Properties() object called keystoreProperties.
 def keystoreProperties = new Properties()
-
-// Load your keystore.properties file into the keystoreProperties object.
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
+    namespace "com.djalel.android.qurankeyboard"
+    compileSdk 33
     signingConfigs {
         config {
             keyAlias keystoreProperties['keyAlias']
@@ -17,16 +17,15 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-   
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+
     defaultConfig {
         applicationId "com.djalel.android.qurankeyboard"
-        minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 8
-        versionName "1.7"
+        minSdk 21
+        targetSdk 33
+        versionCode 9
+        versionName "1.8"
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -35,6 +34,8 @@ android {
         }
     }
     compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
@@ -49,8 +50,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.annotation:annotation:1.2.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.annotation:annotation:1.7.0'
+    implementation 'androidx.preference:preference:1.2.1'
 }

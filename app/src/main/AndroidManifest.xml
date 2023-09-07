@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.djalel.android.qurankeyboard">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +9,8 @@
         android:theme="@style/Theme.AppCompat.Light" >
         <service
             android:name="com.djalel.android.qurankeyboard.QuranKeyboardIME"
-            android:permission="android.permission.BIND_INPUT_METHOD">
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
@@ -19,38 +19,45 @@
                 android:name="android.view.im"
                 android:resource="@xml/method" />
         </service>
-        <activity android:name=".setup.SetupActivity"
-            android:label="@string/ime_name"
+        <activity
+            android:name=".setup.SetupActivity"
             android:icon="@mipmap/ic_launcher"
             android:launchMode="singleTask"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".setup.SetupWizardActivity"
-                android:theme="@style/platformActivityTheme"
-                android:label="@string/ime_name"
-                android:clearTaskOnLaunch="true">
+        <activity
+            android:name=".setup.SetupWizardActivity"
+            android:theme="@style/platformActivityTheme"
+            android:clearTaskOnLaunch="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name=".settings.ImePrefsActivity"
-            android:label="@string/settings_name">
+            android:label="@string/settings_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".settings.AboutActivity">
+        <activity
+            android:name=".settings.AboutActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.PREFERENCE" />
             </intent-filter>
         </activity>
-        <activity android:name=".settings.HelpActivity">
+        <activity
+            android:name=".settings.HelpActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.PREFERENCE" />

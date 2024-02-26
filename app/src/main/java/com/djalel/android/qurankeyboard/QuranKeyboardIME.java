@@ -64,8 +64,7 @@ public class QuranKeyboardIME extends InputMethodService
     private CandidateView mCandidateView;
     private CompletionInfo[] mCompletions;
     
-    private StringBuilder mComposing = new StringBuilder();
-    private boolean mPredictionOn;
+    private final StringBuilder mComposing = new StringBuilder();
     private boolean mCompletionOn;
     private int mLastDisplayWidth;
 
@@ -228,6 +227,8 @@ public class QuranKeyboardIME extends InputMethodService
      */
     @Override public View onCreateCandidatesView() {
         mCandidateView = new CandidateView(this);
+        setCandidatesViewShown(true);
+        setExtractViewShown(onEvaluateFullscreenMode());
         return mCandidateView;
     }
 
@@ -245,7 +246,7 @@ public class QuranKeyboardIME extends InputMethodService
         mComposing.setLength(0);
         updateCandidates();
 
-        mPredictionOn = false;
+        boolean mPredictionOn = false;
         mCompletionOn = false;
         mCompletions = null;
 

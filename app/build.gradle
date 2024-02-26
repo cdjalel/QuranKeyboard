@@ -8,7 +8,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     namespace "com.djalel.android.qurankeyboard"
-    compileSdk 33
+    compileSdk 34
     signingConfigs {
         config {
             keyAlias keystoreProperties['keyAlias']
@@ -21,9 +21,9 @@ android {
     defaultConfig {
         applicationId "com.djalel.android.qurankeyboard"
         minSdk 21
-        targetSdk 33
-        versionCode 9
-        versionName "1.8"
+        targetSdk 34
+        versionCode 10
+        versionName "1.9"
     }
 
     buildTypes {
@@ -49,6 +49,6 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.7.0'
+    implementation 'androidx.annotation:annotation:1.7.1'
     implementation 'androidx.preference:preference:1.2.1'
 }

@@ -17,6 +17,7 @@
 
 package com.djalel.android.qurankeyboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -24,6 +25,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import android.text.Layout;
 import android.text.SpannableString;
@@ -45,12 +48,12 @@ public class CandidateView extends View {
 
     private static final int OUT_OF_BOUNDS = -1;
 
-    private QuranKeyboardIME mService;  // back to the service to communicate with the text field
+    private final QuranKeyboardIME mService;  // back to the service to communicate with the text field
     private List<String> mSuggestions;              // completion
     private List<AyaMatch> mQuranSuggestions;       // quran search results
     private int mSelectedIndex;
     private int mTouchX = OUT_OF_BOUNDS;
-    private Drawable mSelectionHighlight;
+    private final Drawable mSelectionHighlight;
     private boolean mTypedWordValid;
     
     private Rect mBgPadding;
@@ -62,19 +65,21 @@ public class CandidateView extends View {
     private static final List<String> EMPTY_LIST = new ArrayList<>();
     private static final List<AyaMatch> EMPTY_MLIST = new ArrayList<>();
 
-    private int mColorNormal;
-    private int mColorRecommended;
-    private int mColorOther;
-    private int mVerticalPadding;
-    private TextPaint mPaint;
-    private Typeface mDefaultTf;
-    private Typeface mUthamniTf;
+    private final int mColorNormal;
+    private final int mColorRecommended;
+    private final int mColorOther;
+    private final int mVerticalPadding;
+
+    private final Rect mPadding;
+    private final TextPaint mPaint;
+    private final Typeface mDefaultTf;
+    private final Typeface mUthamniTf;
     private boolean mScrolled;
     private int mTargetScrollX;
     
     private int mTotalWidth;
     
-    private GestureDetector mGestureDetector;
+    private final GestureDetector mGestureDetector;
 
     /**
      * Construct a CandidateView for showing suggested words for completion.
@@ -86,6 +91,7 @@ public class CandidateView extends View {
 
         mSelectionHighlight = ContextCompat.getDrawable(context,
                 android.R.drawable.list_selector_background);
+        assert mSelectionHighlight != null;
         mSelectionHighlight.setState(new int[] {
                 android.R.attr.state_enabled,
                 android.R.attr.state_focused,
@@ -102,6 +108,7 @@ public class CandidateView extends View {
         mColorOther = ContextCompat.getColor(context, R.color.candidate_other);
         mVerticalPadding = r.getDimensionPixelSize(R.dimen.candidate_vertical_padding);
 
+        mPadding = new Rect();
         mPaint = new TextPaint();
         mPaint.setColor(mColorNormal);
         mPaint.setAntiAlias(true);
@@ -112,8 +119,8 @@ public class CandidateView extends View {
 
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                    float distanceX, float distanceY) {
+            public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+                                    float distanceX, float distanceY) {
                 mScrolled = true;
                 int sx = getScrollX();
                 sx += distanceX;
@@ -148,11 +155,10 @@ public class CandidateView extends View {
     {
         int measuredWidth = resolveSize(50, widthMeasureSpec);
 
-        Rect padding = new Rect();
-        mSelectionHighlight.getPadding(padding);
+        mSelectionHighlight.getPadding(mPadding);
 
-        final int desiredHeight = ((int)mPaint.getTextSize()) + mVerticalPadding +
-                + padding.top + padding.bottom;
+        final int desiredHeight = ((int)mPaint.getTextSize()) + mVerticalPadding
+                + mPadding.top + mPadding.bottom;
         // Maximum possible width and desired height
         setMeasuredDimension(measuredWidth,
                 resolveSize(desiredHeight, heightMeasureSpec));
@@ -346,12 +352,12 @@ public class CandidateView extends View {
         }
 
         mTotalWidth = 0;
-        if (!mSuggestions.isEmpty()) {
+        if (null != mSuggestions && !mSuggestions.isEmpty()) {
             drawSuggestions(canvas);
             return;
         }
 
-        if (!mQuranSuggestions.isEmpty()) {
+        if (null != mQuranSuggestions && !mQuranSuggestions.isEmpty()) {
             drawMatchSuggestions(canvas);
         }
     }
@@ -413,6 +419,7 @@ public class CandidateView extends View {
         invalidate();
     }
     
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent me) {
 

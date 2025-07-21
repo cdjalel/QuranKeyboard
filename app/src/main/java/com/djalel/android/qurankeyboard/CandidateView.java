@@ -31,9 +31,13 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.style.ForegroundColorSpan;
 //import android.text.style.StyleSpan;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.djalel.android.qurankeyboard.qsearch.AyaMatch;
 import com.djalel.android.qurankeyboard.qsearch.Rasm;
@@ -45,12 +49,12 @@ public class CandidateView extends View {
 
     private static final int OUT_OF_BOUNDS = -1;
 
-    private QuranKeyboardIME mService;  // back to the service to communicate with the text field
+    private final QuranKeyboardIME mService;  // back to the service to communicate with the text field
     private List<String> mSuggestions;              // completion
     private List<AyaMatch> mQuranSuggestions;       // quran search results
     private int mSelectedIndex;
     private int mTouchX = OUT_OF_BOUNDS;
-    private Drawable mSelectionHighlight;
+    private final Drawable mSelectionHighlight;
     private boolean mTypedWordValid;
     
     private Rect mBgPadding;
@@ -62,36 +66,49 @@ public class CandidateView extends View {
     private static final List<String> EMPTY_LIST = new ArrayList<>();
     private static final List<AyaMatch> EMPTY_MLIST = new ArrayList<>();
 
-    private int mColorNormal;
-    private int mColorRecommended;
-    private int mColorOther;
-    private int mVerticalPadding;
-    private TextPaint mPaint;
-    private Typeface mDefaultTf;
-    private Typeface mUthamniTf;
+    private final int mColorNormal;
+    private final int mColorRecommended;
+    private final int mColorOther;
+    private final int mVerticalPadding; // This field holds the pixel value for TOTAL vertical padding
+    private final TextPaint mPaint;
+    private final Typeface mDefaultTf;
+    private final Typeface mUthamniTf;
     private boolean mScrolled;
     private int mTargetScrollX;
     
     private int mTotalWidth;
-    
-    private GestureDetector mGestureDetector;
+
+    private final GestureDetector mGestureDetector;
 
     /**
      * Construct a CandidateView for showing suggested words for completion.
      * @param context context
      */
     public CandidateView(Context context) {
-        super(context);
+        this(context, null); // Chain to the next constructor
+    }
+
+    // THIS IS THE CRUCIAL ONE THAT IS MISSING OR INCORRECT
+    public CandidateView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0); // Chain to the next constructor, passing 0 for default style
+    }
+
+    // Good practice to include this one as well
+    public CandidateView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
         mService = (QuranKeyboardIME) context;
 
         mSelectionHighlight = ContextCompat.getDrawable(context,
                 android.R.drawable.list_selector_background);
-        mSelectionHighlight.setState(new int[] {
-                android.R.attr.state_enabled,
-                android.R.attr.state_focused,
-                android.R.attr.state_window_focused,
-                android.R.attr.state_pressed
-        });
+        if (null != mSelectionHighlight) {
+            mSelectionHighlight.setState(new int[] {
+                    android.R.attr.state_enabled,
+                    android.R.attr.state_focused,
+                    android.R.attr.state_window_focused,
+                    android.R.attr.state_pressed
+            });
+        }
 
         Resources r = context.getResources();
         
@@ -116,12 +133,12 @@ public class CandidateView extends View {
                     float distanceX, float distanceY) {
                 mScrolled = true;
                 int sx = getScrollX();
-                sx += distanceX;
+                sx += (int) distanceX;
                 if (sx < 0) {
                     sx = 0;
                 }
                 if (sx + getWidth() > mTotalWidth) {                    
-                    sx -= distanceX;
+                    sx -= (int) distanceX;
                 }
                 mTargetScrollX = sx;
                 scrollTo(sx, getScrollY());
@@ -137,7 +154,7 @@ public class CandidateView extends View {
         setLayoutDirection(LAYOUT_DIRECTION_RTL);
         setTextDirection(TEXT_DIRECTION_RTL);
     }
-    
+
     @Override
     public int computeHorizontalScrollRange() {
         return mTotalWidth;
@@ -146,22 +163,72 @@ public class CandidateView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        int measuredWidth = resolveSize(50, widthMeasureSpec);
+        // 1. Get the measured width, typically parent's width for a match_parent view
+        int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
 
+        // 2. Get padding from highlight drawable (with null check)
         Rect padding = new Rect();
-        mSelectionHighlight.getPadding(padding);
+        if (mSelectionHighlight != null) {
+            mSelectionHighlight.getPadding(padding);
+        }
 
-        final int desiredHeight = ((int)mPaint.getTextSize()) + mVerticalPadding +
-                + padding.top + padding.bottom;
-        // Maximum possible width and desired height
-        setMeasuredDimension(measuredWidth,
-                resolveSize(desiredHeight, heightMeasureSpec));
+        // 3. Calculate the desired height, mVerticalPadding is TOTAL padding
+        float textRenderHeight = mPaint.descent() - mPaint.ascent();
+        // This calculates the height needed for ONE line of text with padding on top and bottom.
+        final int calculatedDesiredHeight = (int) (textRenderHeight + mVerticalPadding + padding.top + padding.bottom);
+
+        // 4. Set the measured dimensions
+        // resolveSize will respect the EXACTLY spec (if layout_height is fixed in XML),
+        // or use calculatedDesiredHeight if layout_height is wrap_content or unspecified.
+        setMeasuredDimension(measuredWidth, resolveSize(calculatedDesiredHeight, heightMeasureSpec));
+
+        /*Log.e("CandidateView", "onMeasure: MeasuredDimension set to " + measuredWidth + "x" + resolveSize(calculatedDesiredHeight, heightMeasureSpec));
+        Log.e("CandidateView", "onMeasure: isAttachedToWindow() = " + isAttachedToWindow() );
+        Log.d("CandidateView", "View Bounds: Left=" + getLeft() + ", Top=" + getTop() +
+                ", Right=" + getRight() + ", Bottom=" + getBottom());
+        Log.d("CandidateView", "Measured: " + getMeasuredWidth() + "x" + getMeasuredHeight());
+        ViewParent parent = getParent();
+        logParentDetails();*/
     }
 
+    /*private void logParentDetails() {
+        ViewParent parent = getParent();
+        if (parent instanceof ViewGroup) {
+            ViewGroup parentView = (ViewGroup) parent;
+            Log.d("CandidateView", "Parent Class: " + parentView.getClass().getName());
+            Log.d("CandidateView", "Parent ID: " + (parentView.getId() != View.NO_ID ?
+                    getResources().getResourceName(parentView.getId()) : "No ID"));
+            Log.d("CandidateView", "Parent Visibility: " + visibilityToString(parentView.getVisibility()));
+            Log.d("CandidateView", "Parent Bounds: Left=" + parentView.getLeft() +
+                    ", Top=" + parentView.getTop() + ", Right=" + parentView.getRight() +
+                    ", Bottom=" + parentView.getBottom());
+            Log.d("CandidateView", "Parent Measured: " + parentView.getMeasuredWidth() +
+                    "x" + parentView.getMeasuredHeight());
+            Log.d("CandidateView", "Parent ClipChildren: " + parentView.getClipChildren());
+            Log.d("CandidateView", "Parent ClipToPadding: " + parentView.getClipToPadding());
+            Log.d("CandidateView", "Parent IsAttachedToWindow: " + parentView.isAttachedToWindow());
+            Log.d("CandidateView", "Parent Child Count: " + parentView.getChildCount());
+            Log.d("CandidateView", "Parent Background: " + (parentView.getBackground() != null ?
+                    parentView.getBackground().toString() : "None"));
+            Log.d("CandidateView", "Parent LayoutParams: " + parentView.getLayoutParams());
+        } else {
+            Log.d("CandidateView", "Parent is null or not a ViewGroup");
+        }
+    }
+
+    private String visibilityToString(int visibility) {
+        switch (visibility) {
+            case View.VISIBLE: return "VISIBLE";
+            case View.INVISIBLE: return "INVISIBLE";
+            case View.GONE: return "GONE";
+            default: return "Unknown (" + visibility + ")";
+        }
+    }
+*/
     private void drawSuggestions(Canvas canvas)
     {
-        mPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.candidate_font_height));
-        mPaint.setTypeface(mDefaultTf);
+//        mPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.candidate_font_height));
+//        mPaint.setTypeface(mDefaultTf);
 
         if (mBgPadding == null) {
             mBgPadding = new Rect(0, 0, 0, 0);
@@ -178,7 +245,13 @@ public class CandidateView extends View {
         final int scrollX = getScrollX();
         final boolean scrolled = mScrolled;
         final boolean typedWordValid = mTypedWordValid;
-        final int y = (int) (((height - mPaint.getTextSize()) / 2) - mPaint.ascent());
+
+        //  Calculate text baseline for vertical centering using TOTAL padding
+        float textRenderHeight = paint.descent() - paint.ascent();
+        float totalContentHeight = textRenderHeight + mVerticalPadding; // mVerticalPadding is TOTAL padding
+        float contentBlockStartY = (height - totalContentHeight) / 2.0f;
+        // Baseline = content block's start Y + (half of total vertical padding) - text ascent
+        final float textBaselineY = contentBlockStartY + (mVerticalPadding / 2.0f) - paint.ascent();
 
         for (int i = 0; i < count; i++) {
             String suggestion = mSuggestions.get(i);
@@ -202,8 +275,8 @@ public class CandidateView extends View {
                 } else if (i != 0) {
                     paint.setColor(mColorOther);
                 }
-                canvas.drawText(suggestion, x + X_GAP, y, paint);
-                paint.setColor(mColorOther); 
+                canvas.drawText(suggestion, x + X_GAP, textBaselineY, paint);
+                paint.setColor(mColorOther);
                 canvas.drawLine(x + wordWidth, bgPadding.top, x + wordWidth, height + 1, paint);
             }
             x += wordWidth;
@@ -244,7 +317,6 @@ public class CandidateView extends View {
         final int touchX = mTouchX;
         final int scrollX = getScrollX();
         final boolean scrolled = mScrolled;
-//        final int y = (int) (((height - mPaint.getTextSize()) / 2) - mPaint.ascent());
 
         for (int i = 0; i < count; i++) {
             AyaMatch match = mQuranSuggestions.get(i);
@@ -274,9 +346,16 @@ public class CandidateView extends View {
                 paint.setColor(mColorNormal);
                 StaticLayout layout = new StaticLayout(spanStr, paint, (int) textWidth + X_GAP,
                         Layout.Alignment.ALIGN_OPPOSITE, 1, 0, true);
-                canvas.translate(x + X_GAP, 0);
+
+                // Calculate vertical offset for StaticLayout centering using TOTAL padding ---
+                // Here, we center the StaticLayout's height PLUS the total vertical padding
+                float totalContentHeightForStaticLayout = layout.getHeight() + mVerticalPadding;
+                float verticalOffset = (height - totalContentHeightForStaticLayout) / 2.0f;
+
+                canvas.translate(x + X_GAP, verticalOffset);
                 layout.draw(canvas);
-                canvas.translate(-x - X_GAP, 0);
+                canvas.translate(-(x + X_GAP), -verticalOffset);
+
                 paint.setColor(mColorOther);
                 canvas.drawLine(x + wordWidth + 0.5f, bgPadding.top,
                         x + wordWidth + 0.5f, height + 1, paint);
@@ -379,8 +458,6 @@ public class CandidateView extends View {
     {
         scrollTo(0, 0);
         mTargetScrollX = 0;
-        // Compute the total width
-//        onDraw(null);
         invalidate();
         requestLayout();
     }

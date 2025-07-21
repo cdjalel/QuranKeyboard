@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Region;
 import android.graphics.Typeface;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
@@ -42,6 +43,7 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.djalel.android.qurankeyboard.qsearch.AyaMatch;
@@ -60,11 +62,15 @@ public class QuranKeyboardIME extends InputMethodService
 
     private InputMethodManager mInputMethodManager;
 
-    private ArabicKeyboardView mInputView;
+    private ArabicKeyboardView mKeyboardView;
     private CandidateView mCandidateView;
+    private View mRootImeView; // This will hold both keyboard and candidate view
+    private FrameLayout mKeyboardContainer; // Reference to the container where the keyboard will be placed
+
+
     private CompletionInfo[] mCompletions;
     
-    private StringBuilder mComposing = new StringBuilder();
+    private final StringBuilder mComposing = new StringBuilder();
     private boolean mPredictionOn;
     private boolean mCompletionOn;
     private int mLastDisplayWidth;
@@ -157,20 +163,28 @@ public class QuranKeyboardIME extends InputMethodService
         }
     }
 
-    private void createKeyboardView(boolean checkBigKeys) {
+    // Refactored: This method now returns the ArabicKeyboardView instance.
+    // It's called from onCreateInputView to populate the keyboard_container.
+    private ArabicKeyboardView createKeyboardViewInternal(boolean checkBigKeys) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean bigKeys = sharedPref.getBoolean("pref_big_keys", false);
-        if (checkBigKeys && (bigKeys == mBigKeyViews)) return;
+        if (checkBigKeys && (bigKeys == mBigKeyViews)) {
+            // If keys haven't changed, and mKeyboardView is already inflated,
+            // we can return the existing one.
+            if (mKeyboardView != null) return mKeyboardView;
+        }
         mBigKeyViews = bigKeys;
 
+        ArabicKeyboardView newKeyboardView;
         if (bigKeys) {
-            mInputView = (ArabicKeyboardView) getLayoutInflater().inflate(
+            newKeyboardView = (ArabicKeyboardView) getLayoutInflater().inflate(
                     R.layout.input_big, null);
         } else {
-            mInputView = (ArabicKeyboardView) getLayoutInflater().inflate(
+            newKeyboardView = (ArabicKeyboardView) getLayoutInflater().inflate(
                     R.layout.input, null);
         }
-        mInputView.setOnKeyboardActionListener(this);
+        newKeyboardView.setOnKeyboardActionListener(this);
+        return newKeyboardView;
     }
 
     /**
@@ -194,24 +208,45 @@ public class QuranKeyboardIME extends InputMethodService
      * be generated.  This will be called the first time your input method
      * is displayed, and every time it needs to be re-created such as due to
      * a configuration change.
+     *  This will be the single root view for the IME.
      */
     @Override public View onCreateInputView() {
-        createKeyboards(true);
-        if (mCreateInputViewFirstRun) {
-            mCreateInputViewFirstRun = false;
-            createKeyboardView(false);
-            setArabicKeyboard(mArabicKeyboard);
+        createKeyboards(true);  // Ensure keyboards are up to date based on prefs
+
+        // Inflate the main IME root layout only once if not already done, or re-inflate for config changes
+        if (mRootImeView == null || mCreateInputViewFirstRun) {
+            mCreateInputViewFirstRun = false; // Reset for subsequent calls if needed
+
+            mRootImeView = getLayoutInflater().inflate(R.layout.ime_root_layout, null);
+
+            // Find the container for the keyboard and the candidate view
+            mKeyboardContainer = mRootImeView.findViewById(R.id.keyboard_container);
+            mCandidateView = mRootImeView.findViewById(R.id.candidate_view);
         }
-        else {
-            createKeyboardView(true);
-            // Apply the selected keyboard to the input view.
-            setArabicKeyboard(mCurKeyboard);
+
+        // Get the specific keyboard view (big or normal)
+        ArabicKeyboardView newKeyboardView = createKeyboardViewInternal(true);
+
+        // If the keyboard view has changed (e.g., from normal to big keys)
+        if (mKeyboardView != newKeyboardView) {
+            mKeyboardView = newKeyboardView;
+            mKeyboardContainer.removeAllViews(); // Clear old keyboard if any
+            mKeyboardContainer.addView(mKeyboardView); // Add the new keyboard view
         }
+
+        // Apply the selected keyboard to the input view
+        setArabicKeyboard(mCurKeyboard);
 
         // resetting token users
         mOptionsDialog = null;
 
-        return mInputView;
+        // Ensure candidate view is initially hidden and clear
+        if (mCandidateView != null) {
+            mCandidateView.setVisibility(View.GONE);
+            mCandidateView.clear();
+        }
+
+        return mRootImeView; // Return the single root view
     }
 
     private void setArabicKeyboard(ArabicKeyboard nextKeyboard) {
@@ -219,7 +254,9 @@ public class QuranKeyboardIME extends InputMethodService
                 mInputMethodManager.shouldOfferSwitchingToNextInputMethod(getToken());
         nextKeyboard.setLanguageSwitchKeyVisibility(shouldSupportLanguageSwitchKey);
 
-        mInputView.setKeyboard(nextKeyboard);
+        if (mKeyboardView != null) { // Make sure mKeyboardView is not null
+            mKeyboardView.setKeyboard(nextKeyboard);
+        }
     }
 
     /**
@@ -227,8 +264,7 @@ public class QuranKeyboardIME extends InputMethodService
      * be generated, like {@link #onCreateInputView}.
      */
     @Override public View onCreateCandidatesView() {
-        mCandidateView = new CandidateView(this);
-        return mCandidateView;
+        return null;
     }
 
     /**
@@ -311,6 +347,7 @@ public class QuranKeyboardIME extends InputMethodService
         // Update the label on the enter key, depending on what the application
         // says it will do.
         mCurKeyboard.setImeOptions(this, attribute.imeOptions);
+
     }
 
     /**
@@ -323,31 +360,42 @@ public class QuranKeyboardIME extends InputMethodService
         // Clear current composing text and candidates.
         mComposing.setLength(0);
         updateCandidates();
-        
+
+        // Ensure candidate view is hidden when input finishes
         // We only hide the candidates window when finishing input on
         // a particular editor, to avoid popping the underlying application
         // up and down if the user is entering text into the bottom of
         // its window.
-        setCandidatesViewShown(false);
+        if (mCandidateView != null) {
+            mCandidateView.setVisibility(View.GONE);
+        }
         
         mCurKeyboard = mArabicKeyboard;
-        if (mInputView != null) {
-            mInputView.closing();
-        }
     }
     
     @Override public void onStartInputView(EditorInfo attribute, boolean restarting) {
         super.onStartInputView(attribute, restarting);
+        // This will now inflate mRootImeView and populate mKeyboardView and mCandidateView
         setInputView(onCreateInputView());
-        mInputView.closing();
+
+        // In this integrated layout, you manage candidate view visibility yourself.
+        // Initially, ensure it's hidden unless there's something to show.
+        if (mCandidateView != null) {
+            mCandidateView.setVisibility(View.GONE);
+            mCandidateView.clear(); // Clear any stale state
+        }
+
+//        if (mPredictionOn) {
+//            setCandidatesViewShown(true);
+//        }
     }
 
     /**
      * Deal with the editor reporting movement of its cursor.
      */
     @Override public void onUpdateSelection(int oldSelStart, int oldSelEnd,
-            int newSelStart, int newSelEnd,
-            int candidatesStart, int candidatesEnd) {
+                                            int newSelStart, int newSelEnd,
+                                            int candidatesStart, int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
                 candidatesStart, candidatesEnd);
         
@@ -398,8 +446,8 @@ public class QuranKeyboardIME extends InputMethodService
                 // key for us, to dismiss the input method if it is shown.
                 // However, our keyboard could be showing a pop-up window
                 // that back should dismiss, so we first allow it to do that.
-                if (event.getRepeatCount() == 0 && mInputView != null) {
-                    if (mInputView.handleBack()) {
+                if (event.getRepeatCount() == 0 && mKeyboardView != null) {
+                    if (mKeyboardView.handleBack()) {
                         return true;
                     }
                 }
@@ -491,8 +539,8 @@ public class QuranKeyboardIME extends InputMethodService
         } else if (primaryCode == ArabicKeyboardView.KEYCODE_OPTIONS) {
             launchSettings();
         } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
-                && mInputView != null) {
-            Keyboard current = mInputView.getKeyboard();
+                && mKeyboardView != null) {
+            Keyboard current = mKeyboardView.getKeyboard();
             if (current == mSymbolsKeyboard || current == mSymbolsShiftedKeyboard) {
                 setArabicKeyboard(mArabicKeyboard);
             } else {
@@ -525,7 +573,7 @@ public class QuranKeyboardIME extends InputMethodService
         return p.substring(mSavedPreSpaces);
     }
 
-    /** main buisness
+    /** main business
      * Update the list of available candidates from the current composing
      * text.  This will need to be filled in by however you are determining
      * candidates.
@@ -533,7 +581,7 @@ public class QuranKeyboardIME extends InputMethodService
     private void updateCandidates() {
         if (!mCompletionOn && mDoQuranSearch) {
             if (mComposing.length() == 0) {
-                setSuggestions(null, false);
+                setSuggestions(null, false); // This will now hide the CandidateView
                 return;
             }
 
@@ -543,48 +591,50 @@ public class QuranKeyboardIME extends InputMethodService
                 int limit = getPrefSearchLimit();
                 ArrayList<AyaMatch> qlist = mQuranSearch.search(trimedPattern, limit);
                 if (!qlist.isEmpty()) {
-                    setQuranSuggestions(qlist);
+                    setQuranSuggestions(qlist);     // This will now show the CandidateView
                     return;
                 }
                 // FALLTHROUGH
             }
             ArrayList<String> list = new ArrayList<>();
             list.add(pattern);
-            setSuggestions(list, true);
-        }
-    }
-    
-    private void setSuggestions(List<String> suggestions, boolean typedWordValid) {
-        if (suggestions != null && suggestions.size() > 0) {
-            setCandidatesViewShown(true);
-        } else if (isExtractViewShown()) {
-            setCandidatesViewShown(true);
-        }
-        mSavedPreSpaces = 0;
-        mQuranSuggestions = EMPTY_MLIST;
-        mSuggestions = EMPTY_LIST;
-        if (mCandidateView != null) {
-            if (suggestions != null) {
-                mSuggestions = suggestions;
-            }
-            mCandidateView.setSuggestions(suggestions, typedWordValid);
+            setSuggestions(list, true);     // This will now show the CandidateView
         }
     }
 
-    private void setQuranSuggestions(List<AyaMatch> suggestions) {
-        if (suggestions != null && suggestions.size() > 0) {
-            setCandidatesViewShown(true);
-        } else if (isExtractViewShown()) {
-            setCandidatesViewShown(true);
+    // This now directly controls the mCandidateView's visibility
+    private void setSuggestions(List<String> suggestions, boolean typedWordValid) {
+        mSavedPreSpaces = 0;
+        mQuranSuggestions = EMPTY_MLIST;
+        mSuggestions = EMPTY_LIST;
+
+        if (mCandidateView != null) {
+            if (suggestions != null && suggestions.size() > 0) {
+                mSuggestions = suggestions;
+                mCandidateView.setSuggestions(suggestions, typedWordValid);
+                mCandidateView.setVisibility(View.VISIBLE); // SHOW IT
+            } else {
+                mCandidateView.setSuggestions(null, typedWordValid);
+                mCandidateView.setVisibility(View.GONE); // HIDE IT
+            }
         }
+    }
+
+    // This now directly controls the mCandidateView's visibility
+    private void setQuranSuggestions(List<AyaMatch> suggestions) {
         mSuggestions = EMPTY_LIST;
         mQuranSuggestions = EMPTY_MLIST;
         mSavedPreSpaces = 0;
+
         if (mCandidateView != null) {
-            if (suggestions != null) {
+            if (suggestions != null && suggestions.size() > 0) {
                 mQuranSuggestions = suggestions;
+                mCandidateView.setQuranSuggestions(suggestions);
+                mCandidateView.setVisibility(View.VISIBLE); // SHOW IT
+            } else {
+                mCandidateView.setQuranSuggestions(null);
+                mCandidateView.setVisibility(View.GONE); // HIDE IT
             }
-            mCandidateView.setQuranSuggestions(suggestions);
         }
     }
 
@@ -604,18 +654,18 @@ public class QuranKeyboardIME extends InputMethodService
     }
 
     private void handleShift() {
-        if (mInputView == null) {
+        if (mKeyboardView == null) {
             return;
         }
         
-        Keyboard currentKeyboard = mInputView.getKeyboard();
+        Keyboard currentKeyboard = mKeyboardView.getKeyboard();
         if (mArabicKeyboard == currentKeyboard) {
             // Alphabet keyboard
             mDoQuranSearch = !mDoQuranSearch;
-            mInputView.setShifted(mDoQuranSearch);
+            mKeyboardView.setShifted(mDoQuranSearch);
             if (!mDoQuranSearch) {
                 commitTyped(getCurrentInputConnection());
-                setSuggestions(null, false);
+                setSuggestions(null, false); // hide CandidateView
             }
         } else if (currentKeyboard == mSymbolsKeyboard) {
             mSymbolsKeyboard.setShifted(true);
@@ -644,7 +694,7 @@ public class QuranKeyboardIME extends InputMethodService
     private void handleClose() {
         commitTyped(getCurrentInputConnection());
         requestHideSelf(0);
-        mInputView.closing();
+        mKeyboardView.closing();
     }
 
     private void handleLanguageSwitch() {
@@ -675,6 +725,7 @@ public class QuranKeyboardIME extends InputMethodService
             getCurrentInputConnection().commitCompletion(ci);
             if (mCandidateView != null) {
                 mCandidateView.clear();
+                mCandidateView.setVisibility(View.GONE); // Hide after selection
             }
             return;
         }
@@ -715,7 +766,7 @@ public class QuranKeyboardIME extends InputMethodService
                 mSavedPreSpaces = 0;
             }
             mComposing.setLength(0);
-            updateCandidates();
+            updateCandidates(); // This will trigger visibility check
         }
     }
 
@@ -861,11 +912,61 @@ public class QuranKeyboardIME extends InputMethodService
         Window window = mOptionsDialog.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
         if (lp != null) {
-            lp.token = mInputView.getWindowToken();
+            lp.token = mKeyboardView.getWindowToken();
             lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
             window.setAttributes(lp);
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         mOptionsDialog.show();
+    }
+
+    @Override
+    public void onComputeInsets(InputMethodService.Insets outInsets) {
+        super.onComputeInsets(outInsets);
+
+        final Window window = getWindow().getWindow();
+        if (window == null) {
+            // If window is null, we can't compute insets properly.
+            // This should rarely happen.
+            return;
+        }
+
+        final View decorView = window.getDecorView();
+        if (decorView == null) {
+            // If decorView is null, also can't compute insets.
+            return;
+        }
+
+        // Get the total height of the IME window itself.
+        // This is the entire area the IME is occupying on screen.
+        int imeWindowHeight = decorView.getHeight();
+        int imeWindowWidth = decorView.getWidth();
+
+        if (!isInputViewShown()) {
+            // If the input view (keyboard) is not shown, the IME window is effectively "hidden"
+            // or just placeholder. In this case, the contentTopInsets should indicate
+            // that the entire screen content is visible.
+            outInsets.contentTopInsets = imeWindowHeight;
+            outInsets.visibleTopInsets = imeWindowHeight;
+            outInsets.touchableRegion.setEmpty(); // No touchable area from IME
+            return;
+        }
+
+        // We only need the height of your mRootImeView.
+        // Its height will inherently include the candidate view's height if it's visible.
+        int rootImeViewHeight = mRootImeView != null ? mRootImeView.getHeight() : 0;
+
+        outInsets.contentTopInsets = imeWindowHeight - rootImeViewHeight;
+        outInsets.visibleTopInsets = outInsets.contentTopInsets;
+
+        outInsets.touchableRegion.setEmpty();
+        if (mRootImeView != null) {
+            // The touchable region covers the entire root IME view.
+            outInsets.touchableRegion.op(
+                    0, imeWindowHeight - rootImeViewHeight, // Top of your root IME view
+                    imeWindowWidth, imeWindowHeight,        // Bottom of your root IME view (decorView height)
+                    Region.Op.UNION);
+        }
+        outInsets.touchableInsets = Insets.TOUCHABLE_INSETS_REGION;
     }
 }

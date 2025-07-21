@@ -7,8 +7,8 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace "com.djalel.android.qurankeyboard"
-    compileSdk 33
+    namespace = "com.djalel.android.qurankeyboard"
+    compileSdk = 35
     signingConfigs {
         config {
             keyAlias keystoreProperties['keyAlias']
@@ -19,39 +19,36 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.djalel.android.qurankeyboard"
-        minSdk 21
-        targetSdk 33
-        versionCode 9
-        versionName "1.8"
+        applicationId = "com.djalel.android.qurankeyboard"
+        minSdk = 21
+        targetSdk = 35
+        versionCode = 10
+        versionName = "1.10"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            signingConfig signingConfigs.config
+            signingConfig = signingConfigs.config
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    lint {
+        abortOnError = false
     }
 
-    lintOptions {
-          // checkReleaseBuilds false
-          // Or, if you prefer, you can continue to check for errors in release builds,
-          // but continue the build even when errors are found:
-          abortOnError false
-    }
 }
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.annotation:annotation:1.9.1'
     implementation 'androidx.preference:preference:1.2.1'
 }

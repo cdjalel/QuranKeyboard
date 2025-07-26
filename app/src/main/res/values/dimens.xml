@@ -36,5 +36,5 @@
     <dimen name="candidate_uthmani_font_height">20sp</dimen>
     <dimen name="candidate_vertical_padding">16sp</dimen>
     <dimen name="about_padding">7dip</dimen>
-    <dimen name="candidate_area_height">52dp</dimen>>
+    <dimen name="candidate_area_height">40dp</dimen>>
 </resources>

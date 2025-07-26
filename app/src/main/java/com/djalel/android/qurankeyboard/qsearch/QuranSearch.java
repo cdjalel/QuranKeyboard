@@ -208,12 +208,14 @@ public class QuranSearch {
         char [] buffer = new char[DEF_BUFFER_SIZE];
         StringBuilder sb = new StringBuilder();
 
-        InputStream is = ime.getResources().openRawResource(R.raw.quran);
-        InputStreamReader in = new InputStreamReader(is, StandardCharsets.UTF_8);
-        while (EOF != (n = in.read(buffer))) {
-            sb.append(buffer, 0, n);
-//            count += n;
-        }
+        try (InputStream is = ime.getResources().openRawResource(R.raw.quran);
+             InputStreamReader in = new InputStreamReader(is, StandardCharsets.UTF_8)) {
+            while (EOF != (n = in.read(buffer))) {
+                sb.append(buffer, 0, n);
+//              count += n;
+            }
+        } // both in and is are closed automatically here
+
 //        long stop = System.nanoTime();
         quran = sb.toString();
 

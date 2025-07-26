@@ -32,12 +32,9 @@ import android.text.TextPaint;
 import android.text.style.ForegroundColorSpan;
 //import android.text.style.StyleSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import com.djalel.android.qurankeyboard.qsearch.AyaMatch;
 import com.djalel.android.qurankeyboard.qsearch.Rasm;
@@ -181,50 +178,8 @@ public class CandidateView extends View {
         // resolveSize will respect the EXACTLY spec (if layout_height is fixed in XML),
         // or use calculatedDesiredHeight if layout_height is wrap_content or unspecified.
         setMeasuredDimension(measuredWidth, resolveSize(calculatedDesiredHeight, heightMeasureSpec));
-
-        /*Log.e("CandidateView", "onMeasure: MeasuredDimension set to " + measuredWidth + "x" + resolveSize(calculatedDesiredHeight, heightMeasureSpec));
-        Log.e("CandidateView", "onMeasure: isAttachedToWindow() = " + isAttachedToWindow() );
-        Log.d("CandidateView", "View Bounds: Left=" + getLeft() + ", Top=" + getTop() +
-                ", Right=" + getRight() + ", Bottom=" + getBottom());
-        Log.d("CandidateView", "Measured: " + getMeasuredWidth() + "x" + getMeasuredHeight());
-        ViewParent parent = getParent();
-        logParentDetails();*/
     }
 
-    /*private void logParentDetails() {
-        ViewParent parent = getParent();
-        if (parent instanceof ViewGroup) {
-            ViewGroup parentView = (ViewGroup) parent;
-            Log.d("CandidateView", "Parent Class: " + parentView.getClass().getName());
-            Log.d("CandidateView", "Parent ID: " + (parentView.getId() != View.NO_ID ?
-                    getResources().getResourceName(parentView.getId()) : "No ID"));
-            Log.d("CandidateView", "Parent Visibility: " + visibilityToString(parentView.getVisibility()));
-            Log.d("CandidateView", "Parent Bounds: Left=" + parentView.getLeft() +
-                    ", Top=" + parentView.getTop() + ", Right=" + parentView.getRight() +
-                    ", Bottom=" + parentView.getBottom());
-            Log.d("CandidateView", "Parent Measured: " + parentView.getMeasuredWidth() +
-                    "x" + parentView.getMeasuredHeight());
-            Log.d("CandidateView", "Parent ClipChildren: " + parentView.getClipChildren());
-            Log.d("CandidateView", "Parent ClipToPadding: " + parentView.getClipToPadding());
-            Log.d("CandidateView", "Parent IsAttachedToWindow: " + parentView.isAttachedToWindow());
-            Log.d("CandidateView", "Parent Child Count: " + parentView.getChildCount());
-            Log.d("CandidateView", "Parent Background: " + (parentView.getBackground() != null ?
-                    parentView.getBackground().toString() : "None"));
-            Log.d("CandidateView", "Parent LayoutParams: " + parentView.getLayoutParams());
-        } else {
-            Log.d("CandidateView", "Parent is null or not a ViewGroup");
-        }
-    }
-
-    private String visibilityToString(int visibility) {
-        switch (visibility) {
-            case View.VISIBLE: return "VISIBLE";
-            case View.INVISIBLE: return "INVISIBLE";
-            case View.GONE: return "GONE";
-            default: return "Unknown (" + visibility + ")";
-        }
-    }
-*/
     private void drawSuggestions(Canvas canvas)
     {
 //        mPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.candidate_font_height));
@@ -338,77 +293,25 @@ public class CandidateView extends View {
                 SpannableString spanStr = new SpannableString(match.strBld);
                 for(Integer oc : match.indexes) {
                     spanStr.setSpan(new ForegroundColorSpan(
-                            mColorRecommended), oc, oc + match.mlen, 0);
+                            mColorRecommended), oc, oc + match.mlen, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                     // Next has a problem with arabic letter joining.
-                    // TODO: report bug to Google as it seems like an issue in android RTL lib.
-                    //spanStr.setSpan(new StyleSpan(Typeface.BOLD), oc, oc + match.mlen, 0);
+                    // spanStr.setSpan(new StyleSpan(Typeface.BOLD), oc, oc + match.mlen, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 paint.setColor(mColorNormal);
                 StaticLayout layout = new StaticLayout(spanStr, paint, (int) textWidth + X_GAP,
                         Layout.Alignment.ALIGN_OPPOSITE, 1, 0, true);
-
-                // Calculate vertical offset for StaticLayout centering using TOTAL padding ---
-                // Here, we center the StaticLayout's height PLUS the total vertical padding
-                float totalContentHeightForStaticLayout = layout.getHeight() + mVerticalPadding;
-                float verticalOffset = (height - totalContentHeightForStaticLayout) / 2.0f;
-
-                canvas.translate(x + X_GAP, verticalOffset);
+                canvas.translate(x + X_GAP, 0);
                 layout.draw(canvas);
-                canvas.translate(-(x + X_GAP), -verticalOffset);
+                canvas.translate(-(x + X_GAP), 0);
 
                 paint.setColor(mColorOther);
                 canvas.drawLine(x + wordWidth + 0.5f, bgPadding.top,
                         x + wordWidth + 0.5f, height + 1, paint);
             }
             x += wordWidth;
-
-/*
-            // code prior to SpannableString discovery :)
-            // HAS A PROBLEM with letter joining as they are drawn separately.
-            x += wordWidth;
-            if (canvas != null) {
-                // XXX assert match.indexes.size() > 0
-                int j = 0;           // 1st char of any substring preceding each pattern occurrence
-                int shiftWidth = 0;  // horizontal shift in the canvas, relative to 'x'
-                int patternWidth = 0;
-                String pattern = null;
-                for(Integer oc : match.indexes) {
-                    if (oc >= match.len) return;
-                    //draw any substring before the pattern
-                    if (oc > j) {
-                        String txt = match.strBld.substring(j, oc);
-                        shiftWidth += (int) paint.measureText(txt);
-                        paint.setFakeBoldText(false);
-                        paint.setColor(mColorNormal);
-                        canvas.drawText(txt, x - X_GAP - shiftWidth, y, paint);
-                        j = oc;
-                    }
-                    // draw the pattern
-                    if (pattern == null) {
-                        pattern = match.strBld.substring(oc, oc + match.mlen);
-                        patternWidth = (int) paint.measureText(pattern);
-                    }
-                    shiftWidth += patternWidth;
-                    paint.setFakeBoldText(true);
-                    paint.setColor(mColorRecommended);
-                    canvas.drawText(pattern, x - X_GAP - shiftWidth, y, paint);
-                    j += match.mlen;
-                }
-                
-                // draw the substring after the last occurrence if any
-                if (j < match.len) {
-                    String txt = match.strBld.substring(j, match.len);
-                    paint.setFakeBoldText(false);
-                    paint.setColor(mColorNormal);
-                    canvas.drawText(txt, x + X_GAP - wordWidth, y, paint);
-                }
-                paint.setFakeBoldText(false);
-                paint.setColor(mColorNormal);
-                canvas.drawLine(x + 0.5f, bgPadding.top, x + 0.5f, height + 1, paint);
-            }
-*/
         }
         mTotalWidth = x;
+
         if (mTargetScrollX != getScrollX()) {
             scrollToTarget();
         }
@@ -441,13 +344,13 @@ public class CandidateView extends View {
             sx += SCROLL_PIXELS;
             if (sx >= mTargetScrollX) {
                 sx = mTargetScrollX;
-                requestLayout();
+                //requestLayout();
             }
         } else {
             sx -= SCROLL_PIXELS;
             if (sx <= mTargetScrollX) {
                 sx = mTargetScrollX;
-                requestLayout();
+                //requestLayout();
             }
         }
         scrollTo(sx, getScrollY());
@@ -492,8 +395,17 @@ public class CandidateView extends View {
     
     @Override
     public boolean onTouchEvent(MotionEvent me) {
-
         if (mGestureDetector.onTouchEvent(me)) {
+            // If GestureDetector consumed it, especially for scroll,
+            // you might not need to do much more here for that specific event.
+            // However, ACTION_DOWN needs to propagate to mGestureDetector.
+            // And you'll need ACTION_UP for selection logic if not a scroll.
+            if (me.getAction() == MotionEvent.ACTION_DOWN) {
+                mScrolled = false; // Reset scroll flag on new touch sequence
+            }
+            // if it was a scroll, onScroll in the listener would have handled it.
+            // if it was a fling, onFling would handle it.
+            // return true to indicate you've handled the touch.
             return true;
         }
 
@@ -525,7 +437,7 @@ public class CandidateView extends View {
             }
             mSelectedIndex = -1;
             removeHighlight();
-            requestLayout();
+            //requestLayout();
             break;
         }
         return true;

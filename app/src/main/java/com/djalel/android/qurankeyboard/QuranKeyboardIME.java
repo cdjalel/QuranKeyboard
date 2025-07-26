@@ -287,7 +287,7 @@ public class QuranKeyboardIME extends InputMethodService
         mComposing.setLength(0);
         updateCandidates();
 
-        boolean mPredictionOn = false;
+        mPredictionOn = false;
         mCompletionOn = false;
         mCompletions = null;
 

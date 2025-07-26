@@ -17,6 +17,7 @@
 
 package com.djalel.android.qurankeyboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -24,6 +25,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import android.text.Layout;
 import android.text.SpannableString;
@@ -126,8 +129,8 @@ public class CandidateView extends View {
 
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                    float distanceX, float distanceY) {
+            public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2,
+                                    float distanceX, float distanceY) {
                 mScrolled = true;
                 int sx = getScrollX();
                 sx += (int) distanceX;
@@ -328,12 +331,12 @@ public class CandidateView extends View {
         }
 
         mTotalWidth = 0;
-        if (!mSuggestions.isEmpty()) {
+        if (null != mSuggestions && !mSuggestions.isEmpty()) {
             drawSuggestions(canvas);
             return;
         }
 
-        if (!mQuranSuggestions.isEmpty()) {
+        if (null != mQuranSuggestions && !mQuranSuggestions.isEmpty()) {
             drawMatchSuggestions(canvas);
         }
     }
@@ -393,6 +396,7 @@ public class CandidateView extends View {
         invalidate();
     }
     
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent me) {
         if (mGestureDetector.onTouchEvent(me)) {
